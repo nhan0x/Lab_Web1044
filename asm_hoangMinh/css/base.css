@@ -1,0 +1,53 @@
+:root {
+    --halo-yellow: #FFE700;
+    --halo-yellow-hover: #ecd500;
+    --halo-dark: #232200;
+    --halo-black: #1a1a1a;
+    --halo-header-bg: #1e1e1e;
+    --halo-nav-bg: #2d2d2d;
+    --halo-red: #e52d27;
+    --halo-text-main: #333333;
+    --halo-text-muted: #666666;
+    --halo-bg-light: #f5f6f8;
+    --halo-border: #e0e0e0;
+    --halo-radius: 8px;
+    --halo-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+    --halo-shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.12);
+    --halo-transition: all 0.25s ease-in-out;
+    --font-family: 'Montserrat', Arial, sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--font-family);
+}
+
+body {
+    background-color: var(--halo-bg-light);
+    color: var(--halo-text-main);
+    line-height: 1.5;
+    overflow-x: hidden;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: var(--halo-transition);
+}
+
+ul {
+    list-style: none;
+}
+
+button, input, select, textarea {
+    font-family: inherit;
+    outline: none;
+}
+
+.container {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 15px;
+}

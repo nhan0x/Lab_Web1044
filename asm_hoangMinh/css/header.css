@@ -1,0 +1,221 @@
+/* ============================================================
+   1. TOP BAR
+   ============================================================ */
+.site-topbar {
+    background-color: #111111;
+    color: #d1d1d1;
+    font-size: 12px;
+    border-bottom: 1px solid #2a2a2a;
+}
+
+.topbar-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 34px;
+}
+
+.topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.topbar-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.topbar-item i {
+    color: var(--halo-yellow);
+}
+
+.topbar-item b {
+    color: #ffffff;
+}
+
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.topbar-link:hover {
+    color: var(--halo-yellow);
+}
+
+/* ============================================================
+   2. MAIN HEADER
+   ============================================================ */
+.site-header {
+    background-color: var(--halo-header-bg);
+    color: #ffffff;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    transition: var(--halo-transition);
+}
+
+.site-header.header-scrolled {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.header-main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 12px 0;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.mobile-menu-toggle {
+    display: none;
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 22px;
+    cursor: pointer;
+    padding: 6px;
+}
+
+.header-logo img {
+    max-height: 44px;
+    width: auto;
+    display: block;
+    transition: transform 0.2s;
+}
+
+.header-logo:hover img {
+    transform: scale(1.02);
+}
+
+.logo-text {
+    color: var(--halo-yellow);
+    font-size: 34px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    line-height: 1;
+    display: block;
+}
+
+/* Search Bar */
+.header-center {
+    flex: 1;
+    max-width: 580px;
+}
+
+.search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 25px;
+    overflow: hidden;
+    border: 2px solid var(--halo-yellow);
+}
+
+.search-input {
+    flex: 1;
+    padding: 10px 18px;
+    border: none;
+    font-size: 13.5px;
+    color: #222;
+}
+
+.search-btn {
+    background-color: var(--halo-yellow);
+    border: none;
+    color: #111;
+    font-size: 15px;
+    padding: 0 20px;
+    height: 42px;
+    cursor: pointer;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.search-btn:hover {
+    background-color: var(--halo-yellow-hover);
+}
+
+/* Header Actions */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.header-action-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #ffffff;
+    user-select: none;
+}
+
+.header-action-item:hover {
+    color: var(--halo-yellow);
+}
+
+.header-action-icon {
+    position: relative;
+    width: 38px;
+    height: 38px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: var(--halo-yellow);
+    transition: var(--halo-transition);
+}
+
+.header-action-item:hover .header-action-icon {
+    background: var(--halo-yellow);
+    color: #111;
+}
+
+.badge-count {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: var(--halo-red);
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 700;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    border: 2px solid var(--halo-header-bg);
+}
+
+.header-action-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+}
+
+.header-action-text small {
+    font-size: 11px;
+    font-weight: 400;
+    color: #aaa;
+}

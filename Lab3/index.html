@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 3 & HomeWork – Nguyễn Thiện Nhân</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f1f5f9;
+            padding: 24px 16px 60px;
+            color: #1e293b;
+        }
+        header { text-align: center; margin-bottom: 24px; }
+        header h1 { font-size: 2.1rem; color: #0284c7; font-weight: 800; letter-spacing: -0.5px; }
+        header p { color: #64748b; margin-top: 6px; font-size: 1.05rem; }
+
+        .tab-nav {
+            display: inline-flex; justify-content: center; gap: 10px;
+            margin: 20px auto 30px; background: #e2e8f0; padding: 6px;
+            border-radius: 14px; max-width: 95vw;
+        }
+        .tab-btn {
+            padding: 10px 22px; border-radius: 10px; font-size: 0.95rem;
+            font-weight: 700; border: none; cursor: pointer; transition: all 0.25s ease;
+            background: transparent; color: #64748b; display: inline-flex;
+            align-items: center; justify-content: center; gap: 8px; white-space: nowrap;
+        }
+        .tab-btn:hover { color: #1e293b; }
+        .tab-btn.active.school-tab { background: #ffffff; color: #0284c7; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.15); }
+        .tab-btn.active.hw-tab { background: #ffffff; color: #7c3aed; box-shadow: 0 4px 12px rgba(109, 40, 217, 0.15); }
+
+        @media (max-width: 640px) {
+            .tab-nav { display: flex; flex-direction: column; width: 100%; }
+            .tab-btn { white-space: normal; text-align: center; }
+        }
+
+        .container { width: 100%; max-width: 98vw; margin: 0 auto; }
+        .section-header {
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 12px; margin-bottom: 18px; padding: 0 4px;
+        }
+        .section-header h2 { font-size: 1.3rem; color: #1e293b; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        .badge-count { font-size: 0.8rem; font-weight: 700; padding: 4px 12px; border-radius: 20px; }
+        .badge-blue { background: #e0f2fe; color: #0284c7; }
+        .badge-purple { background: #ede9fe; color: #7c3aed; }
+
+        .view-controls {
+            display: flex; align-items: center; gap: 8px; background: #ffffff;
+            padding: 4px 8px; border-radius: 10px; border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+        }
+        .view-controls span { font-size: 0.8rem; color: #64748b; font-weight: 600; margin-right: 4px; }
+        .view-btn {
+            background: #f1f5f9; border: 1px solid #e2e8f0; color: #475569;
+            padding: 4px 10px; border-radius: 6px; font-size: 0.78rem; font-weight: 600;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .view-btn:hover { background: #e2e8f0; color: #1e293b; }
+        .view-btn.active { background: #0284c7; color: #ffffff; border-color: #0369a1; }
+
+        .grid-5 { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; }
+        .grid-5.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .grid-5.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+        @media (max-width: 1400px) {
+            .grid-5:not(.cols-2):not(.cols-3) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        }
+        @media (max-width: 900px) {
+            .grid-5, .grid-5.cols-3, .grid-5.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        @media (max-width: 650px) {
+            .grid-5, .grid-5.cols-3, .grid-5.cols-2 { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px;
+            overflow: hidden; display: flex; flex-direction: column;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05); transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card:hover { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); }
+
+        .card-header-blue {
+            background: linear-gradient(135deg, #0284c7, #2563eb); padding: 10px 14px;
+            display: flex; align-items: center; gap: 8px; color: #ffffff;
+        }
+        .card-header-purple {
+            background: linear-gradient(135deg, #7c3aed, #4f46e5); padding: 10px 14px;
+            display: flex; align-items: center; gap: 8px; color: #ffffff;
+        }
+        .card-header-blue .num, .card-header-purple .num {
+            background: rgba(255, 255, 255, 0.22); color: #ffffff; font-size: 0.74rem;
+            font-weight: 700; padding: 3px 8px; border-radius: 20px; white-space: nowrap;
+        }
+        .card h3 {
+            font-size: 0.88rem; font-weight: 600; white-space: nowrap;
+            overflow: hidden; text-overflow: ellipsis; color: #ffffff; flex: 1;
+        }
+
+        .card-body { padding: 12px; display: flex; flex-direction: column; gap: 10px; flex: 1; background: #ffffff; }
+
+        .block-title {
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 0.74rem; font-weight: 700; color: #475569;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .btn-group { display: flex; gap: 5px; }
+        .action-btn {
+            background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1;
+            padding: 3px 8px; border-radius: 5px; font-size: 0.7rem; font-weight: 600;
+            cursor: pointer; transition: all 0.15s;
+        }
+        .action-btn:hover { background: #e2e8f0; color: #0f172a; }
+
+        .code-container {
+            background: #0f172a; border-radius: 8px; padding: 12px 14px 8px 14px;
+            height: 290px; overflow: auto; position: relative;
+            scrollbar-width: thin; scrollbar-color: #64748b #1e293b;
+        }
+        .code-container pre {
+            margin: 0; font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.82rem; line-height: 1.58; color: #e2e8f0; white-space: pre; padding-bottom: 6px;
+        }
+        .code-container::-webkit-scrollbar { width: 9px; height: 11px; }
+        .code-container::-webkit-scrollbar-track { background: #1e293b; border-radius: 6px; margin: 2px 4px; }
+        .code-container::-webkit-scrollbar-thumb { background: #64748b; border-radius: 6px; border: 2px solid #1e293b; }
+        .code-container::-webkit-scrollbar-thumb:hover { background: #94a3b8; cursor: grab; }
+
+        .kw      { color: #c084fc; font-weight: 600; }
+        .fn      { color: #60a5fa; font-weight: 600; }
+        .str     { color: #34d399; }
+        .num-val { color: #fbbf24; }
+        .com     { color: #94a3b8; font-style: italic; }
+
+        .output-container {
+            background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px;
+            padding: 10px 12px; height: 120px; overflow: auto;
+            font-family: 'Consolas', monospace; font-size: 0.85rem; line-height: 1.65;
+            color: #0f172a; font-weight: 700;
+            scrollbar-width: thin; scrollbar-color: #cbd5e1 #f1f5f9;
+        }
+        .output-school { border-left: 4px solid #0284c7; }
+        .output-hw { border-left: 4px solid #10b981; }
+        .output-container::-webkit-scrollbar { width: 7px; height: 7px; }
+        .output-container::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        .output-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .output-container .line { word-break: break-word; font-weight: 700; color: #0f172a; }
+        .output-school .line::before { content: "❯ "; color: #0284c7; font-weight: 800; }
+        .output-hw .line::before { content: "❯ "; color: #10b981; font-weight: 800; }
+
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(4px); z-index: 9999;
+            align-items: center; justify-content: center; padding: 20px;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-card {
+            background: #ffffff; width: 100%; max-width: 820px; border-radius: 16px;
+            overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            display: flex; flex-direction: column; max-height: 90vh;
+        }
+        .modal-header { padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; color: #ffffff; }
+        .modal-header.blue { background: linear-gradient(135deg, #0284c7, #2563eb); }
+        .modal-header.purple { background: linear-gradient(135deg, #7c3aed, #4f46e5); }
+        .modal-header h3 { font-size: 1.1rem; font-weight: 700; }
+        .modal-close {
+            background: rgba(255,255,255,0.2); border: none; color: #ffffff;
+            width: 32px; height: 32px; border-radius: 50%; font-size: 1.1rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .modal-body { padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
+        .modal-code-container { background: #0f172a; border-radius: 10px; padding: 16px; max-height: 380px; overflow: auto; }
+        .modal-code-container pre { font-family: 'Consolas', monospace; font-size: 0.95rem; line-height: 1.6; color: #e2e8f0; }
+        .modal-output-container {
+            background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px; padding: 14px 16px;
+            font-family: 'Consolas', monospace; font-size: 0.95rem; line-height: 1.65; color: #0f172a; font-weight: 700;
+        }
+        .modal-output-container.blue { border-left: 5px solid #0284c7; }
+        .modal-output-container.purple { border-left: 5px solid #10b981; }
+        .modal-output-container .line { font-weight: 700; color: #0f172a; }
+        .modal-output-container.blue .line::before { content: "❯ "; color: #0284c7; font-weight: 800; }
+        .modal-output-container.purple .line::before { content: "❯ "; color: #10b981; font-weight: 800; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>📚 Lab 3 – Hàm & Cấu Trúc Điều Khiển</h1>
+    <p>Sinh viên: <strong style="color:#0284c7">Nguyễn Thiện Nhân</strong> | Web1044</p>
+
+    <div class="tab-nav">
+        <button class="tab-btn active school-tab" id="btn-school" onclick="switchTab('school')">
+            <span>🏫</span> Bài Lab Trên Trường (5 Bài)
+        </button>
+        <button class="tab-btn hw-tab" id="btn-hw" onclick="switchTab('hw')">
+            <span>📚</span> Bài Tập Về Nhà (6 Bài Thêm)
+        </button>
+    </div>
+</header>
+
+<div class="container">
+
+    <div id="pane-school">
+        <div class="section-header">
+            <h2>📋 Bài thực hành tại lớp</h2>
+            <div class="view-controls">
+                <span>Chế độ xem:</span>
+                <button class="view-btn active" onclick="setSchoolColumns(5, this)">5 Cột (Mặc định)</button>
+                <button class="view-btn" onclick="setSchoolColumns(3, this)">3 Cột (Rộng hơn)</button>
+                <button class="view-btn" onclick="setSchoolColumns(2, this)">2 Cột (Cực đại)</button>
+            </div>
+        </div>
+        <div class="grid-5" id="school-area"></div>
+    </div>
+
+    <div id="pane-hw" style="display: none;">
+        <div class="section-header">
+            <h2>📋 Danh sách bài thêm về nhà</h2>
+            <div class="view-controls">
+                <span>Chế độ xem:</span>
+                <button class="view-btn active" onclick="setHwColumns(5, this)">5 Cột (Mặc định)</button>
+                <button class="view-btn" onclick="setHwColumns(3, this)">3 Cột (Rộng hơn)</button>
+                <button class="view-btn" onclick="setHwColumns(2, this)">2 Cột (Cực đại)</button>
+            </div>
+            <span class="badge-count badge-purple">6 Bài Thêm</span>
+        </div>
+        <div class="grid-5" id="hw-area"></div>
+    </div>
+
+</div>
+
+<div class="modal-overlay" id="detail-modal" onclick="closeModal(event)">
+    <div class="modal-card">
+        <div class="modal-header" id="modal-header">
+            <h3 id="modal-title">Chi tiết bài tập</h3>
+            <button class="modal-close" onclick="closeModalDirect()">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="block-title">
+                <span>💻 Mã nguồn</span>
+                <div class="btn-group">
+                    <button class="action-btn" id="modal-run-btn">▶ Chạy thử</button>
+                    <button class="action-btn" id="modal-copy-btn">Sao chép</button>
+                </div>
+            </div>
+            <div class="modal-code-container">
+                <pre><code id="modal-code"></code></pre>
+            </div>
+
+            <div class="block-title">
+                <span>🖥️ Kết quả Output (In đậm)</span>
+            </div>
+            <div class="modal-output-container" id="modal-output"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ===== 5 Bài Lab trên trường =====
+    const schoolExercises = [
+        {
+            id: 1,
+            title: "Kiểm tra số chẵn",
+            fileName: "Bai1.js",
+            code: `// Bài 1: Kiểm tra số có phải số chẵn không
+function isEven(n) {
+    return n % 2 === 0;
+}
+
+console.log(isEven(4)); // true
+console.log(isEven(7)); // false`,
+            run: function (customPrompt) {
+                function isEven(n) { return n % 2 === 0; }
+                let a = 4, b = 7;
+                if (customPrompt) {
+                    const v1 = customPrompt("Nhập số thứ nhất để kiểm tra:", "4");
+                    if (v1 !== null) a = Number(v1);
+                    const v2 = customPrompt("Nhập số thứ hai để kiểm tra:", "7");
+                    if (v2 !== null) b = Number(v2);
+                }
+                return [`isEven(${a}) = ${isEven(a)}`, `isEven(${b}) = ${isEven(b)}`];
+            }
+        },
+        {
+            id: 2,
+            title: "Tính tiền điện (lũy tiến)",
+            fileName: "Bai2.js",
+            code: `// Bài 2: Tính tiền điện theo bậc thang (lũy tiến)
+// 0-50 kWh: 1.800đ/kWh
+// 51-100 kWh: 2.300đ/kWh
+// >100 kWh: 3.000đ/kWh
+function tinhTienDien(kwh) {
+    if (kwh <= 50) {
+        return kwh * 1800;
+    } else if (kwh <= 100) {
+        return 50 * 1800 + (kwh - 50) * 2300;
+    } else {
+        return 50 * 1800 + 50 * 2300 + (kwh - 100) * 3000;
+    }
+}
+
+// Tính ngược: biết số tiền, suy ra số kWh đã dùng
+function tinhSoKwhTuTien(tien) {
+    const tienBac1 = 50 * 1800; // 90.000đ
+    const tienBac2 = 50 * 2300; // 115.000đ
+
+    if (tien <= tienBac1) {
+        return tien / 1800;
+    } else if (tien <= tienBac1 + tienBac2) {
+        return 50 + (tien - tienBac1) / 2300;
+    } else {
+        return 100 + (tien - tienBac1 - tienBac2) / 3000;
+    }
+}
+
+console.log("Tien dien (150 kWh):", tinhTienDien(150));
+console.log("So kWh da dung khi dong 910.000d:", tinhSoKwhTuTien(910000));`,
+            run: function (customPrompt) {
+                function tinhTienDien(kwh) {
+                    if (kwh <= 50) return kwh * 1800;
+                    if (kwh <= 100) return 50 * 1800 + (kwh - 50) * 2300;
+                    return 50 * 1800 + 50 * 2300 + (kwh - 100) * 3000;
+                }
+                function tinhSoKwhTuTien(tien) {
+                    const b1 = 50 * 1800, b2 = 50 * 2300;
+                    if (tien <= b1) return tien / 1800;
+                    if (tien <= b1 + b2) return 50 + (tien - b1) / 2300;
+                    return 100 + (tien - b1 - b2) / 3000;
+                }
+                let kwh = 150, tien = 910000;
+                if (customPrompt) {
+                    const v1 = customPrompt("Nhập số kWh tiêu thụ:", "150");
+                    if (v1 !== null) kwh = Number(v1);
+                    const v2 = customPrompt("Nhập số tiền điện đã đóng (VNĐ):", "910000");
+                    if (v2 !== null) tien = Number(v2);
+                }
+                return [
+                    `Tien dien (${kwh} kWh): ${tinhTienDien(kwh).toLocaleString("vi-VN")}`,
+                    `So kWh da dung khi dong ${tien.toLocaleString("vi-VN")}d: ${tinhSoKwhTuTien(tien)}`
+                ];
+            }
+        },
+        {
+            id: 3,
+            title: "Tính lương theo chức vụ",
+            fileName: "Bai3.js",
+            code: `// Bài 3: Tính lương theo chức vụ và ngày công
+// Lương = hệ số chức vụ * ngày công * (lương cơ bản / ngày công quy định)
+function tinhLuong(chucVu, ngayCong) {
+    const luongCoBan = 5000000;
+    const ngayCongQuyDinh = 24;
+    let heSo;
+
+    switch (chucVu) {
+        case "intern":
+            heSo = 1.0;
+            break;
+        case "staff":
+            heSo = 1.5;
+            break;
+        case "senior":
+            heSo = 2.0;
+            break;
+        case "manager":
+            heSo = 3.0;
+            break;
+        default:
+            return "Chuc vu khong hop le";
+    }
+
+    return heSo * ngayCong * (luongCoBan / ngayCongQuyDinh);
+}
+
+console.log("Luong staff, 22 ngay cong:", tinhLuong("staff", 22));
+console.log("Luong manager, 24 ngay cong:", tinhLuong("manager", 24));`,
+            run: function (customPrompt) {
+                function tinhLuong(chucVu, ngayCong) {
+                    const luongCoBan = 5000000, ngayCongQuyDinh = 24;
+                    let heSo;
+                    switch (chucVu) {
+                        case "intern": heSo = 1.0; break;
+                        case "staff": heSo = 1.5; break;
+                        case "senior": heSo = 2.0; break;
+                        case "manager": heSo = 3.0; break;
+                        default: return null;
+                    }
+                    return heSo * ngayCong * (luongCoBan / ngayCongQuyDinh);
+                }
+                let cv = "staff", nc = 22;
+                if (customPrompt) {
+                    cv = customPrompt("Nhập chức vụ (intern/staff/senior/manager):", "staff") || "staff";
+                    const v = customPrompt("Nhập số ngày công:", "22");
+                    if (v !== null) nc = Number(v);
+                }
+                const luong = tinhLuong(cv, nc);
+                if (luong === null) return [`Chuc vu "${cv}" khong hop le`];
+                return [`Luong ${cv}, ${nc} ngay cong: ${luong.toLocaleString("vi-VN")}`];
+            }
+        },
+        {
+            id: 4,
+            title: "Chuẩn hoá câu",
+            fileName: "Bai4.js",
+            code: `// Bài 4: Chuẩn hoá câu
+// - Xoá khoảng trắng dư thừa (đầu, giữa, cuối câu)
+// - Xoá khoảng trắng trước dấu câu, thêm khoảng trắng sau dấu câu
+// - Viết hoa chữ cái đầu câu (đầu chuỗi và sau mỗi dấu . ! ?)
+function chuanHoaCau(str) {
+    let ketQua = str.trim().replace(/\\s+/g, " ");
+    ketQua = ketQua.replace(/\\s+([.,!?])/g, "$1");
+    ketQua = ketQua.replace(/([.,!?])(\\S)/g, "$1 $2");
+    ketQua = ketQua.replace(/(^|[.!?]\\s)(\\p{L})/gu, (m, p1, p2) => p1 + p2.toUpperCase());
+
+    return ketQua;
+}
+
+const input = " xin chao  cac ban.   hom nay  troi dep qua  !toi  di hoc ve ? ";
+console.log(chuanHoaCau(input));
+// "Xin chao cac ban. Hom nay troi dep qua! Toi di hoc ve?"`,
+            run: function (customPrompt) {
+                function chuanHoaCau(str) {
+                    let ketQua = str.trim().replace(/\s+/g, " ");
+                    ketQua = ketQua.replace(/\s+([.,!?])/g, "$1");
+                    ketQua = ketQua.replace(/([.,!?])(\S)/g, "$1 $2");
+                    ketQua = ketQua.replace(/(^|[.!?]\s)(\p{L})/gu, (m, p1, p2) => p1 + p2.toUpperCase());
+                    return ketQua;
+                }
+                let input = " xin chao  cac ban.   hom nay  troi dep qua  !toi  di hoc ve ? ";
+                if (customPrompt) {
+                    const v = customPrompt("Nhập câu cần chuẩn hoá:", input);
+                    if (v !== null) input = v;
+                }
+                return [chuanHoaCau(input)];
+            }
+        },
+        {
+            id: 5,
+            title: "Calculator",
+            fileName: "Bai5.js",
+            code: `// Bài 5: Hàm calculator như máy tính cầm tay
+function calculator(a, operator, b) {
+    switch (operator) {
+        case "+":
+            return a + b;
+        case "-":
+            return a - b;
+        case "*":
+            return a * b;
+        case "/":
+            if (b === 0) return "Khong the chia cho 0";
+            return a / b;
+        default:
+            return "Toan tu khong hop le";
+    }
+}
+
+console.log(calculator(15.5, "*", 2)); // 31
+console.log(calculator(10, "/", 0));   // Khong the chia cho 0
+console.log(calculator(5, "+", 3));    // 8`,
+            run: function (customPrompt) {
+                function calculator(a, operator, b) {
+                    switch (operator) {
+                        case "+": return a + b;
+                        case "-": return a - b;
+                        case "*": return a * b;
+                        case "/": return b === 0 ? "Khong the chia cho 0" : a / b;
+                        default: return "Toan tu khong hop le";
+                    }
+                }
+                let a = 15.5, op = "*", b = 2;
+                if (customPrompt) {
+                    const v1 = customPrompt("Nhập số thứ nhất:", "15.5");
+                    if (v1 !== null) a = Number(v1);
+                    op = customPrompt("Nhập toán tử (+, -, *, /):", "*") || "*";
+                    const v2 = customPrompt("Nhập số thứ hai:", "2");
+                    if (v2 !== null) b = Number(v2);
+                }
+                return [`calculator(${a}, "${op}", ${b}) = ${calculator(a, op, b)}`];
+            }
+        }
+    ];
+
+    // ===== 6 Bài thêm về nhà =====
+    const hwExercises = [
+        {
+            id: 1,
+            title: "Chu vi, diện tích, đường chéo HCN",
+            fileName: "Baithem1.js",
+            code: `// Bài thêm 1: Tính chu vi, diện tích, đường chéo hình chữ nhật
+function thongTinHCN(a, b) {
+    const chuVi = 2 * (a + b);
+    const dienTich = a * b;
+    const duongCheo = Math.sqrt(a * a + b * b);
+
+    return { chuVi, dienTich, duongCheo };
+}
+
+console.log(thongTinHCN(3, 4));
+// { chuVi: 14, dienTich: 12, duongCheo: 5 }`,
+            run: function (customPrompt) {
+                function thongTinHCN(a, b) {
+                    const chuVi = 2 * (a + b);
+                    const dienTich = a * b;
+                    const duongCheo = Math.sqrt(a * a + b * b);
+                    return { chuVi, dienTich, duongCheo };
+                }
+                let a = 3, b = 4;
+                if (customPrompt) {
+                    const v1 = customPrompt("Nhập chiều dài a:", "3");
+                    if (v1 !== null) a = Number(v1);
+                    const v2 = customPrompt("Nhập chiều rộng b:", "4");
+                    if (v2 !== null) b = Number(v2);
+                }
+                const kq = thongTinHCN(a, b);
+                return [
+                    `Chu vi: ${kq.chuVi}`,
+                    `Dien tich: ${kq.dienTich}`,
+                    `Duong cheo: ${kq.duongCheo}`
+                ];
+            }
+        },
+        {
+            id: 2,
+            title: "Xếp loại sinh viên",
+            fileName: "Baithem2.js",
+            code: `// Bài thêm 2: Xếp loại sinh viên dựa trên điểm trung bình
+// >=8 Gioi | >=6.5 Kha | >=5 Trung binh | >=3.5 Yeu | <3.5 Kem
+function xepLoaiSinhVien(diem) {
+    if (diem >= 8) {
+        return "Gioi";
+    } else if (diem >= 6.5) {
+        return "Kha";
+    } else if (diem >= 5) {
+        return "Trung binh";
+    } else if (diem >= 3.5) {
+        return "Yeu";
+    } else {
+        return "Kem";
+    }
+}
+
+console.log(xepLoaiSinhVien(9));   // Gioi
+console.log(xepLoaiSinhVien(7));   // Kha
+console.log(xepLoaiSinhVien(5.5)); // Trung binh
+console.log(xepLoaiSinhVien(4));   // Yeu
+console.log(xepLoaiSinhVien(2));   // Kem`,
+            run: function (customPrompt) {
+                function xepLoaiSinhVien(diem) {
+                    if (diem >= 8) return "Gioi";
+                    if (diem >= 6.5) return "Kha";
+                    if (diem >= 5) return "Trung binh";
+                    if (diem >= 3.5) return "Yeu";
+                    return "Kem";
+                }
+                let diem = 7;
+                if (customPrompt) {
+                    const v = customPrompt("Nhập điểm trung bình (0-10):", "7");
+                    if (v !== null) diem = Number(v);
+                }
+                return [`xepLoaiSinhVien(${diem}) = ${xepLoaiSinhVien(diem)}`];
+            }
+        },
+        {
+            id: 3,
+            title: "Function Expression - Đổi độ F",
+            fileName: "Baithem3.js",
+            code: `// Bài thêm 3: Function Expression - Đổi độ C sang độ F
+// F = C * 9 / 5 + 32
+const celsiusToFahrenheit = function (c) {
+    return c * 9 / 5 + 32;
+};
+
+console.log("doi sang do F:", celsiusToFahrenheit(0));   // 32
+console.log("doi sang do F:", celsiusToFahrenheit(100)); // 212`,
+            run: function (customPrompt) {
+                const celsiusToFahrenheit = function (c) { return c * 9 / 5 + 32; };
+                let c1 = 0, c2 = 100;
+                if (customPrompt) {
+                    const v1 = customPrompt("Nhập độ C thứ nhất:", "0");
+                    if (v1 !== null) c1 = Number(v1);
+                    const v2 = customPrompt("Nhập độ C thứ hai:", "100");
+                    if (v2 !== null) c2 = Number(v2);
+                }
+                return [
+                    `doi sang do F: ${celsiusToFahrenheit(c1)}`,
+                    `doi sang do F: ${celsiusToFahrenheit(c2)}`
+                ];
+            }
+        },
+        {
+            id: 4,
+            title: "Tính tiền sản phẩm (giảm giá)",
+            fileName: "Baithem4.js",
+            code: `// Bài thêm 4: Tính tiền sản phẩm, giảm giá nếu tổng >= 1.000.000
+// total = price * quantity, giam 10% neu total >= 1.000.000
+const discount = (price, quantity = 1) => {
+    const total = price * quantity;
+    return total >= 1000000 ? total * 0.1 : 0;
+};
+
+const calculateTotal = function (price, quantity = 1) {
+    const total = price * quantity;
+    return total - discount(price, quantity);
+};
+
+console.log("Tong tien (600.000 x 1):", calculateTotal(600000));    // 600000, khong giam
+console.log("Tong tien (600.000 x 2):", calculateTotal(600000, 2)); // 1080000, giam 10%`,
+            run: function (customPrompt) {
+                const discount = (price, quantity = 1) => {
+                    const total = price * quantity;
+                    return total >= 1000000 ? total * 0.1 : 0;
+                };
+                const calculateTotal = function (price, quantity = 1) {
+                    const total = price * quantity;
+                    return total - discount(price, quantity);
+                };
+                let price = 600000, qty = 2;
+                if (customPrompt) {
+                    const v1 = customPrompt("Nhập đơn giá sản phẩm:", "600000");
+                    if (v1 !== null) price = Number(v1);
+                    const v2 = customPrompt("Nhập số lượng:", "2");
+                    if (v2 !== null) qty = Number(v2);
+                }
+                return [`calculateTotal(${price}, ${qty}) = ${calculateTotal(price, qty).toLocaleString("vi-VN")}`];
+            }
+        },
+        {
+            id: 5,
+            title: "Tính tổng nhiều số",
+            fileName: "Baithem5.js",
+            code: `// Bài thêm 5: Tính tổng nhiều số (rest parameters)
+function sum(...numbers) {
+    let total = 0;
+    for (let num of numbers) {
+        total += num;
+    }
+    return total;
+}
+
+console.log("Tong la:", sum(2, 3, 5, 6, 8)); // 24`,
+            run: function (customPrompt) {
+                function sum(...numbers) {
+                    let total = 0;
+                    for (let num of numbers) total += num;
+                    return total;
+                }
+                let arr = [2, 3, 5, 6, 8];
+                if (customPrompt) {
+                    const v = customPrompt("Nhập các số cách nhau bởi dấu phẩy:", "2,3,5,6,8");
+                    if (v !== null) arr = v.split(",").map(Number).filter(n => !isNaN(n));
+                }
+                return [`Tong la: ${sum(...arr)}`];
+            }
+        },
+        {
+            id: 6,
+            title: "Tìm số lớn nhất",
+            fileName: "Baithem6.js",
+            code: `// Bài thêm 6: Tìm số lớn nhất trong nhiều số (rest parameters)
+function max(...numbers) {
+    let m = numbers[0];
+    for (let c of numbers) {
+        if (m < c) {
+            m = c;
+        }
+    }
+    return m;
+}
+
+console.log("Max la:", max(10, 3, 20, 6, 4, 8)); // 20`,
+            run: function (customPrompt) {
+                function max(...numbers) {
+                    let m = numbers[0];
+                    for (let c of numbers) if (m < c) m = c;
+                    return m;
+                }
+                let arr = [10, 3, 20, 6, 4, 8];
+                if (customPrompt) {
+                    const v = customPrompt("Nhập các số cách nhau bởi dấu phẩy:", "10,3,20,6,4,8");
+                    if (v !== null) arr = v.split(",").map(Number).filter(n => !isNaN(n));
+                }
+                return [`Max la: ${max(...arr)}`];
+            }
+        }
+    ];
+
+    function escapeHtml(str) {
+        return String(str)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
+    }
+
+    function highlightJS(code) {
+        const tokenRegex = /(\/\/[^\n]*)|(`(?:\\.|[^`])*`|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')|\b(console\.log|console)\b|\b(let|const|var|typeof|try|catch|function|return|if|else|switch|case|break|default|for|of|in)\b|\b(\d+(?:\.\d+)?)\b/g;
+
+        let lastIndex = 0;
+        let result = "";
+        let match;
+
+        while ((match = tokenRegex.exec(code)) !== null) {
+            result += escapeHtml(code.slice(lastIndex, match.index));
+            lastIndex = tokenRegex.lastIndex;
+
+            if (match[1]) {
+                result += `<span class="com">${escapeHtml(match[1])}</span>`;
+            } else if (match[2]) {
+                result += `<span class="str">${escapeHtml(match[2])}</span>`;
+            } else if (match[3]) {
+                result += `<span class="fn">${escapeHtml(match[3])}</span>`;
+            } else if (match[4]) {
+                result += `<span class="kw">${escapeHtml(match[4])}</span>`;
+            } else if (match[5]) {
+                result += `<span class="num-val">${escapeHtml(match[5])}</span>`;
+            }
+        }
+        result += escapeHtml(code.slice(lastIndex));
+        return result;
+    }
+
+    function copyCodeText(text, btn) {
+        navigator.clipboard.writeText(text).then(() => {
+            const originalText = btn.textContent;
+            btn.textContent = "✓ Đã chép!";
+            btn.style.background = "#dcfce7";
+            btn.style.color = "#15803d";
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.background = "";
+                btn.style.color = "";
+            }, 1400);
+        }).catch(() => {
+            btn.textContent = "Không thể chép (mở qua server)";
+            setTimeout(() => { btn.textContent = "Sao chép"; }, 1800);
+        });
+    }
+
+    function switchTab(type) {
+        const btnSchool = document.getElementById("btn-school");
+        const btnHw = document.getElementById("btn-hw");
+        const paneSchool = document.getElementById("pane-school");
+        const paneHw = document.getElementById("pane-hw");
+
+        if (type === 'school') {
+            btnSchool.classList.add("active");
+            btnHw.classList.remove("active");
+            paneSchool.style.display = "block";
+            paneHw.style.display = "none";
+        } else {
+            btnHw.classList.add("active");
+            btnSchool.classList.remove("active");
+            paneHw.style.display = "block";
+            paneSchool.style.display = "none";
+        }
+    }
+
+    function setSchoolColumns(cols, btn) {
+        document.querySelectorAll('#pane-school .view-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const grid = document.getElementById("school-area");
+        grid.className = "grid-5";
+        if (cols === 3) grid.classList.add("cols-3");
+        if (cols === 2) grid.classList.add("cols-2");
+    }
+
+    function setHwColumns(cols, btn) {
+        document.querySelectorAll('#pane-hw .view-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const grid = document.getElementById("hw-area");
+        grid.className = "grid-5";
+        if (cols === 3) grid.classList.add("cols-3");
+        if (cols === 2) grid.classList.add("cols-2");
+    }
+
+    function runExercise(item, isSchool) {
+        const lines = item.run(window.prompt);
+        const prefix = isSchool ? "school-out-" : "hw-out-";
+        const box = document.getElementById(prefix + item.id);
+        if (box) {
+            box.innerHTML = lines.map(l => `<div class="line">${escapeHtml(l)}</div>`).join("");
+        }
+    }
+
+    function openModal(item, isSchool) {
+        document.getElementById("modal-title").textContent = `Bài ${item.id} – ${item.title}`;
+        document.getElementById("modal-code").innerHTML = highlightJS(item.code);
+
+        const mHeader = document.getElementById("modal-header");
+        const mOut = document.getElementById("modal-output");
+        mHeader.className = "modal-header " + (isSchool ? "blue" : "purple");
+        mOut.className = "modal-output-container " + (isSchool ? "blue" : "purple");
+
+        const initialLines = item.run(null);
+        mOut.innerHTML = initialLines.map(l => `<div class="line">${escapeHtml(l)}</div>`).join("");
+
+        const copyBtn = document.getElementById("modal-copy-btn");
+        copyBtn.onclick = function () {
+            copyCodeText(item.code, copyBtn);
+        };
+
+        const runBtn = document.getElementById("modal-run-btn");
+        runBtn.onclick = function () {
+            const newLines = item.run(window.prompt);
+            mOut.innerHTML = newLines.map(l => `<div class="line">${escapeHtml(l)}</div>`).join("");
+            const prefix = isSchool ? "school-out-" : "hw-out-";
+            const box = document.getElementById(prefix + item.id);
+            if (box) {
+                box.innerHTML = newLines.map(l => `<div class="line">${escapeHtml(l)}</div>`).join("");
+            }
+        };
+
+        document.getElementById("detail-modal").classList.add("active");
+    }
+
+    function closeModal(e) {
+        if (e.target.id === "detail-modal") {
+            document.getElementById("detail-modal").classList.remove("active");
+        }
+    }
+    function closeModalDirect() {
+        document.getElementById("detail-modal").classList.remove("active");
+    }
+
+    const schoolArea = document.getElementById("school-area");
+    schoolExercises.forEach((ex, idx) => {
+        const initialLines = ex.run(null);
+        schoolArea.insertAdjacentHTML("beforeend", `
+            <div class="card">
+                <div class="card-header-blue">
+                    <span class="num">Bài ${ex.id}</span>
+                    <h3 title="${ex.title}">${ex.title}</h3>
+                </div>
+                <div class="card-body">
+                    <div class="block-title">
+                        <span>💻 Mã nguồn (${ex.fileName})</span>
+                        <div class="btn-group">
+                            <button class="action-btn" onclick="runExercise(schoolExercises[${idx}], true)" title="Chạy thử với dữ liệu nhập">▶ Chạy</button>
+                            <button class="action-btn" onclick="openModal(schoolExercises[${idx}], true)" title="Phóng to">🔍</button>
+                            <button class="action-btn" onclick="copyCodeText(schoolExercises[${idx}].code, this)">Sao chép</button>
+                        </div>
+                    </div>
+                    <div class="code-container">
+                        <pre><code>${highlightJS(ex.code)}</code></pre>
+                    </div>
+
+                    <div class="block-title">
+                        <span style="color:#0284c7;">🖥️ Kết quả Output (In đậm)</span>
+                    </div>
+                    <div class="output-container output-school" id="school-out-${ex.id}">
+                        ${initialLines.map(l => `<div class="line">${escapeHtml(l)}</div>`).join("")}
+                    </div>
+                </div>
+            </div>`);
+    });
+
+    const hwArea = document.getElementById("hw-area");
+    hwExercises.forEach((ex, idx) => {
+        const initialLines = ex.run(null);
+        hwArea.insertAdjacentHTML("beforeend", `
+            <div class="card">
+                <div class="card-header-purple">
+                    <span class="num">Bài thêm ${ex.id}</span>
+                    <h3 title="${ex.title}">${ex.title}</h3>
+                </div>
+                <div class="card-body">
+                    <div class="block-title">
+                        <span>💻 Mã nguồn (${ex.fileName})</span>
+                        <div class="btn-group">
+                            <button class="action-btn" onclick="runExercise(hwExercises[${idx}], false)" title="Chạy thử">▶ Chạy</button>
+                            <button class="action-btn" onclick="openModal(hwExercises[${idx}], false)" title="Phóng to">🔍</button>
+                            <button class="action-btn" onclick="copyCodeText(hwExercises[${idx}].code, this)">Sao chép</button>
+                        </div>
+                    </div>
+                    <div class="code-container">
+                        <pre><code>${highlightJS(ex.code)}</code></pre>
+                    </div>
+
+                    <div class="block-title">
+                        <span style="color:#10b981;">🖥️ Kết quả Output (In đậm)</span>
+                    </div>
+                    <div class="output-container output-hw" id="hw-out-${ex.id}">
+                        ${initialLines.map(l => `<div class="line">${escapeHtml(l)}</div>`).join("")}
+                    </div>
+                </div>
+            </div>`);
+    });
+</script>
+
+</body>
+</html>

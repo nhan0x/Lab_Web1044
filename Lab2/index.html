@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 2 – Bài Tập Trên Lớp – Nguyễn Thiện Nhân</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f1f5f9;
+            padding: 24px 16px 60px;
+            color: #1e293b;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+        .tag-school {
+            display: inline-block;
+            background: #e0f2fe;
+            color: #0369a1;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 4px 14px;
+            border-radius: 20px;
+            margin-bottom: 8px;
+        }
+        header h1 {
+            font-size: 2.1rem;
+            color: #0369a1;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        header p {
+            color: #64748b;
+            margin-top: 6px;
+            font-size: 1.05rem;
+        }
+
+        /* Container & Controls */
+        .container {
+            width: 100%;
+            max-width: 98vw;
+            margin: 0 auto;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding: 0 4px;
+        }
+        .section-header h2 {
+            font-size: 1.25rem;
+            color: #1e293b;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .view-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #ffffff;
+            padding: 4px 8px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+        }
+        .view-controls span {
+            font-size: 0.8rem;
+            color: #64748b;
+            font-weight: 600;
+            margin-right: 4px;
+        }
+        .view-btn {
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            color: #475569;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .view-btn:hover {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+        .view-btn.active {
+            background: #0284c7;
+            color: #ffffff;
+            border-color: #0369a1;
+        }
+
+        /* Bố cục Grid 5 Card / Dòng (Mặc định cho 5 bài) */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 16px;
+        }
+        .grid.cols-3 {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+        .grid.cols-2 {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        @media (max-width: 1400px) {
+            .grid:not(.cols-2):not(.cols-3) {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+        @media (max-width: 900px) {
+            .grid, .grid.cols-3, .grid.cols-2 {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+        @media (max-width: 620px) {
+            .grid, .grid.cols-3, .grid.cols-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Card bài tập */
+        .card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.06);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card:hover {
+            box-shadow: 0 8px 24px rgba(2, 132, 199, 0.14);
+        }
+
+        /* Header của từng Card */
+        .card-header {
+            background: linear-gradient(135deg, #0284c7, #2563eb);
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #ffffff;
+        }
+        .card-header .num {
+            background: rgba(255, 255, 255, 0.22);
+            color: #ffffff;
+            font-size: 0.74rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+        .card-header h3 {
+            font-size: 0.88rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #ffffff;
+            flex: 1;
+        }
+
+        /* Body của Card */
+        .card-body {
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex: 1;
+            background: #ffffff;
+        }
+
+        /* Tiêu đề mục nhỏ */
+        .block-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.74rem;
+            font-weight: 700;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .btn-group {
+            display: flex;
+            gap: 5px;
+        }
+        .action-btn {
+            background: #f0f9ff;
+            color: #0284c7;
+            border: 1px solid #bae6fd;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .action-btn:hover {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        /* Khung hiển thị Source Code */
+        .code-container {
+            background: #0f172a;
+            border-radius: 8px;
+            padding: 12px 14px 8px 14px;
+            height: 290px;
+            overflow: auto;
+            position: relative;
+            scrollbar-width: thin;
+            scrollbar-color: #64748b #1e293b;
+        }
+        .code-container pre {
+            margin: 0;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.82rem;
+            line-height: 1.58;
+            color: #e2e8f0;
+            white-space: pre;
+            padding-bottom: 6px;
+        }
+
+        /* Thanh trượt ngang 11px nổi bật */
+        .code-container::-webkit-scrollbar {
+            width: 9px;
+            height: 11px;
+        }
+        .code-container::-webkit-scrollbar-track {
+            background: #1e293b;
+            border-radius: 6px;
+            margin: 2px 4px;
+        }
+        .code-container::-webkit-scrollbar-thumb {
+            background: #64748b;
+            border-radius: 6px;
+            border: 2px solid #1e293b;
+        }
+        .code-container::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+            cursor: grab;
+        }
+        .code-container::-webkit-scrollbar-thumb:active {
+            background: #cbd5e1;
+            cursor: grabbing;
+        }
+
+        /* Tô màu cú pháp */
+        .kw      { color: #c084fc; font-weight: 600; }
+        .fn      { color: #60a5fa; font-weight: 600; }
+        .str     { color: #34d399; }
+        .num-val { color: #fbbf24; }
+        .com     { color: #94a3b8; font-style: italic; }
+
+        /* Khung hiển thị Output in đậm nổi bật */
+        .output-container {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-left: 4px solid #0284c7;
+            border-radius: 8px;
+            padding: 10px 12px;
+            height: 120px;
+            overflow: auto;
+            font-family: 'Consolas', monospace;
+            font-size: 0.85rem;
+            line-height: 1.65;
+            color: #0f172a;
+            font-weight: 700; /* In đậm */
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e1 #f1f5f9;
+        }
+        .output-container::-webkit-scrollbar {
+            width: 7px;
+            height: 7px;
+        }
+        .output-container::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+        .output-container::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .output-container::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .output-container .line {
+            word-break: break-word;
+            font-weight: 700;
+            color: #0f172a;
+        }
+        .output-container .line::before {
+            content: "❯ ";
+            color: #0284c7;
+            font-weight: 800;
+        }
+        .output-container:empty::before {
+            content: "Đang tính toán kết quả...";
+            color: #94a3b8;
+            font-style: italic;
+            font-weight: 400;
+        }
+
+        /* Modal Phóng to */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-card {
+            background: #ffffff;
+            width: 100%;
+            max-width: 820px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            display: flex;
+            flex-direction: column;
+            max-height: 90vh;
+        }
+        .modal-header {
+            background: linear-gradient(135deg, #0284c7, #2563eb);
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #ffffff;
+        }
+        .modal-header h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+        .modal-close {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: #ffffff;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-body {
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .modal-code-container {
+            background: #0f172a;
+            border-radius: 10px;
+            padding: 16px;
+            max-height: 380px;
+            overflow: auto;
+        }
+        .modal-code-container pre {
+            font-family: 'Consolas', monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #e2e8f0;
+        }
+        .modal-output-container {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-left: 5px solid #0284c7;
+            border-radius: 10px;
+            padding: 14px 16px;
+            font-family: 'Consolas', monospace;
+            font-size: 0.95rem;
+            line-height: 1.65;
+            color: #0f172a;
+            font-weight: 700;
+        }
+        .modal-output-container .line {
+            font-weight: 700;
+            color: #0f172a;
+        }
+        .modal-output-container .line::before {
+            content: "❯ ";
+            color: #0284c7;
+            font-weight: 800;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🏫 Lab 2 – Cấu Trúc Điều Kiện & Vòng Lặp (Bài Lab Trên Lớp)</h1>
+    <p>Sinh viên: <strong style="color:#0284c7">Nguyễn Thiện Nhân</strong> | Web1044</p>
+</header>
+
+<div class="container">
+    <div class="section-header">
+        <h2>📋 Danh sách bài thực hành tại lớp</h2>
+        <div class="view-controls">
+            <span>Chế độ xem:</span>
+            <button class="view-btn active" onclick="setColumns(5, this)">5 Cột (Mặc định)</button>
+            <button class="view-btn" onclick="setColumns(3, this)">3 Cột (Rộng hơn)</button>
+            <button class="view-btn" onclick="setColumns(2, this)">2 Cột (Cực đại)</button>
+        </div>
+    </div>
+    <div class="grid" id="output-area"></div>
+</div>
+
+<!-- Modal Phóng to -->
+<div class="modal-overlay" id="detail-modal" onclick="closeModal(event)">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3 id="modal-title">Chi tiết bài tập</h3>
+            <button class="modal-close" onclick="closeModalDirect()">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="block-title">
+                <span>💻 Mã nguồn</span>
+                <div class="btn-group">
+                    <button class="action-btn" id="modal-run-btn">▶ Chạy thử</button>
+                    <button class="action-btn" id="modal-copy-btn">Sao chép</button>
+                </div>
+            </div>
+            <div class="modal-code-container">
+                <pre><code id="modal-code"></code></pre>
+            </div>
+
+            <div class="block-title">
+                <span>🖥️ Kết quả Output (In đậm)</span>
+            </div>
+            <div class="modal-output-container" id="modal-output"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Dữ liệu 5 bài Lab 2
+    const exercises = [
+        {
+            id: 1,
+            title: "Kiểm tra số chẵn và lẻ",
+            code: `// Bài 1: Kiểm tra số chẳn và lẻ
+let a = Number(prompt("Nhập một số nguyên"));
+
+if (isNaN(a)) {
+  console.log("Vui lòng nhập một số hợp lệ!");
+} else if (a % 2 === 0) {
+  console.log(\`\${a} là số chẵn\`);
+} else {
+  console.log(\`\${a} là số lẻ\`);
+}`,
+            defaultInput: ["8"],
+            run: function(customPrompt) {
+                const getVal = customPrompt || (() => "8");
+                let a = Number(getVal("Nhập một số nguyên:", "8"));
+                if (isNaN(a)) {
+                    return ["Vui lòng nhập một số hợp lệ!"];
+                } else if (a % 2 === 0) {
+                    return [`${a} là số chẵn`];
+                } else {
+                    return [`${a} là số lẻ`];
+                }
+            }
+        },
+        {
+            id: 2,
+            title: "Tính tiền điện sinh hoạt",
+            code: `// PHẦN 1: Tính tiền điện khi biết trước số kWh
+
+let kwh = Number(prompt("Nhập số kWh tiêu thụ: "));
+let tongTien = 0;
+
+if (isNaN(kwh) || kwh < 0) {
+  console.log("Vui lòng nhập số kWh hợp lệ (số không âm)!");
+} else {
+  if (kwh <= 50) {
+    tongTien = kwh * 1800;
+  } else if (kwh <= 100) {
+    tongTien = 50 * 1800 + (kwh - 50) * 2300;
+  } else {
+    tongTien = 50 * 1800 + 50 * 2300 + (kwh - 100) * 3000;
+  }
+  
+  console.log(\`Số điện tiêu thụ: \${kwh} kWh\`);
+  console.log(\`Tiền điện phải trả: \${tongTien.toLocaleString("vi-VN")} VNĐ\`);
+}
+
+
+// PHẦN 2: Tính số điện tiêu thụ khi biết tiền là 910.000đ
+
+let tien = 910000;
+let kwhTieuThu = 0;
+
+const moc1 = 50 * 1800;             // 90.000đ cho 50 kWh đầu
+const moc2 = moc1 + 50 * 2300;      // 205.000đ cho 100 kWh đầu
+
+if (tien <= moc1) {
+  kwhTieuThu = tien / 1800;
+} else if (tien <= moc2) {
+  kwhTieuThu = 50 + (tien - moc1) / 2300;
+} else {
+  kwhTieuThu = 100 + (tien - moc2) / 3000;
+}
+
+// Làm tròn 2 chữ số thập phân cho gọn gàng
+console.log("------------------------------------------");
+console.log(\`Với số tiền điện là \${tien} VNĐ:\`);
+console.log(\`Nhà đó đã dùng: \${kwhTieuThu.toFixed(2)} kWh (hoặc xấp xỉ \${Math.round(kwhTieuThu)} kWh)\`);`,
+            defaultInput: ["120"],
+            run: function(customPrompt) {
+                let kwh = 120;
+                if (customPrompt) {
+                    const input = customPrompt("Nhập số kWh tiêu thụ (hoặc nhấn Hủy để dùng mặc định 120 kWh):", "120");
+                    if (input !== null && !isNaN(Number(input)) && Number(input) >= 0) {
+                        kwh = Number(input);
+                    }
+                }
+                const logs = ["[PHẦN 1: Tính tiền điện theo kWh]"];
+                let tongTien = 0;
+                if (isNaN(kwh) || kwh < 0) {
+                    logs.push("Vui lòng nhập số kWh hợp lệ (số không âm)!");
+                } else {
+                    if (kwh <= 50) {
+                        tongTien = kwh * 1800;
+                    } else if (kwh <= 100) {
+                        tongTien = 50 * 1800 + (kwh - 50) * 2300;
+                    } else {
+                        tongTien = 50 * 1800 + 50 * 2300 + (kwh - 100) * 3000;
+                    }
+                    logs.push(`Số điện tiêu thụ: ${kwh} kWh`);
+                    logs.push(`Tiền điện phải trả: ${tongTien.toLocaleString("vi-VN")} VNĐ`);
+                }
+
+                logs.push("------------------------------------------");
+                logs.push("[PHẦN 2: Tính ngược kWh khi biết tiền là 910.000đ]");
+                let tien = 910000;
+                let kwhTieuThu = 0;
+                const moc1 = 50 * 1800;
+                const moc2 = moc1 + 50 * 2300;
+                if (tien <= moc1) {
+                    kwhTieuThu = tien / 1800;
+                } else if (tien <= moc2) {
+                    kwhTieuThu = 50 + (tien - moc1) / 2300;
+                } else {
+                    kwhTieuThu = 100 + (tien - moc2) / 3000;
+                }
+                logs.push(`Với số tiền điện là ${tien.toLocaleString("vi-VN")} VNĐ:`);
+                logs.push(`Nhà đó đã dùng: ${kwhTieuThu.toFixed(2)} kWh (xấp xỉ ${Math.round(kwhTieuThu)} kWh)`);
+
+                return logs;
+            }
+        },
+        {
+            id: 3,
+            title: "Tính lương theo chức vụ",
+            code: `let chucVu = prompt("Nhập chức vụ (intern/staff/senior/manager): ");
+let ngayCong = Number(prompt("Nhập số ngày công: "));
+let heSo = 0;
+
+switch (chucVu) {
+    case "intern":
+        heSo = 1.0;
+        break;
+    case "staff":
+        heSo = 1.5;
+        break;
+    case "senior":
+        heSo = 2.0;
+        break;
+    case "manager":
+        heSo = 3.0;
+        break;
+    default:
+        console.log("Chức vụ không hợp lệ!");
+}
+
+if (heSo > 0) {
+    let luong = heSo * ngayCong * (5000000 / 24);
+    console.log(\`Chức vụ \${chucVu}, \${ngayCong} ngày công, lương: \${luong} VNĐ\`);
+}`,
+            defaultInput: ["senior", "22"],
+            run: function(customPrompt) {
+                let chucVu = "senior";
+                let ngayCong = 22;
+                if (customPrompt) {
+                    chucVu = customPrompt("Nhập chức vụ (intern/staff/senior/manager):", "senior") || "senior";
+                    ngayCong = Number(customPrompt("Nhập số ngày công:", "22")) || 22;
+                }
+                let heSo = 0;
+                switch (chucVu) {
+                    case "intern": heSo = 1.0; break;
+                    case "staff": heSo = 1.5; break;
+                    case "senior": heSo = 2.0; break;
+                    case "manager": heSo = 3.0; break;
+                    default: return ["Chức vụ không hợp lệ!"];
+                }
+                let luong = heSo * ngayCong * (5000000 / 24);
+                return [`Chức vụ ${chucVu}, ${ngayCong} ngày công`, `Lương: ${luong.toLocaleString('vi-VN')} VNĐ`];
+            }
+        },
+        {
+            id: 4,
+            title: "Bảng cửu chương từ 2 đến 9",
+            code: `for (let i = 2; i <= 9; i++) {
+    console.log(\`--- Bảng \${i} ---\`);
+    for (let j = 1; j <= 10; j++) {
+        console.log(\`\${i} x \${j} = \${i * j}\`);
+    }
+}`,
+            defaultInput: [],
+            run: function() {
+                const logs = [];
+                for (let i = 2; i <= 9; i++) {
+                    logs.push(`--- Bảng ${i} ---`);
+                    for (let j = 1; j <= 10; j++) {
+                        logs.push(`${i} x ${j} = ${i * j}`);
+                    }
+                }
+                return logs;
+            }
+        },
+        {
+            id: 5,
+            title: "Kiểm tra số nguyên tố",
+            code: `let n = Number(prompt("Nhập số để kiểm tra: "));
+let laNguyenTo = true;
+
+if (isNaN(n)) {
+    console.log("Vui lòng nhập số hợp lệ!");
+} else if (n < 2) {
+    console.log(\`\${n} không phải số nguyên tố\`);
+} else {
+    for (let i = 2; i <= Math.sqrt(n); i++) {
+        if (n % i === 0) {
+            laNguyenTo = false;
+            break;
+        }
+    }
+
+    if (laNguyenTo) {
+        console.log(\`\${n} là số nguyên tố\`);
+    } else {
+        console.log(\`\${n} không phải số nguyên tố\`);
+    }
+}`,
+            defaultInput: ["17"],
+            run: function(customPrompt) {
+                let n = 17;
+                if (customPrompt) {
+                    const input = customPrompt("Nhập số để kiểm tra nguyên tố:", "17");
+                    if (input !== null) n = Number(input);
+                }
+                if (isNaN(n)) return ["Vui lòng nhập số hợp lệ!"];
+                if (n < 2) return [`${n} không phải số nguyên tố`];
+                let laNguyenTo = true;
+                for (let i = 2; i <= Math.sqrt(n); i++) {
+                    if (n % i === 0) {
+                        laNguyenTo = false;
+                        break;
+                    }
+                }
+                return laNguyenTo ? [`${n} là số nguyên tố`] : [`${n} không phải số nguyên tố`];
+            }
+        }
+    ];
+
+    function escapeHtml(str) {
+        return str
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
+    }
+
+    function highlightJS(code) {
+        const tokenRegex = /(\/\/[^\n]*)|(`(?:\\.|[^`])*`|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')|\b(console\.log|console)\b|\b(let|const|var|typeof|try|catch|function|return|if|else|switch|case|break|default|for)\b|\b(\d+(?:\.\d+)?)\b/g;
+
+        let lastIndex = 0;
+        let result = "";
+        let match;
+
+        while ((match = tokenRegex.exec(code)) !== null) {
+            result += escapeHtml(code.slice(lastIndex, match.index));
+            lastIndex = tokenRegex.lastIndex;
+
+            if (match[1]) {
+                result += `<span class="com">${escapeHtml(match[1])}</span>`;
+            } else if (match[2]) {
+                result += `<span class="str">${escapeHtml(match[2])}</span>`;
+            } else if (match[3]) {
+                result += `<span class="fn">${escapeHtml(match[3])}</span>`;
+            } else if (match[4]) {
+                result += `<span class="kw">${escapeHtml(match[4])}</span>`;
+            } else if (match[5]) {
+                result += `<span class="num-val">${escapeHtml(match[5])}</span>`;
+            }
+        }
+        result += escapeHtml(code.slice(lastIndex));
+        return result;
+    }
+
+    function copyCode(baiId, btn) {
+        const item = exercises.find(e => e.id === baiId);
+        if (!item) return;
+        navigator.clipboard.writeText(item.code).then(() => {
+            const originalText = btn.textContent;
+            btn.textContent = "✓ Đã chép!";
+            btn.style.background = "#dcfce7";
+            btn.style.color = "#15803d";
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.background = "";
+                btn.style.color = "";
+            }, 1400);
+        });
+    }
+
+    function setColumns(cols, btn) {
+        document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const grid = document.getElementById("output-area");
+        grid.className = "grid";
+        if (cols === 3) grid.classList.add("cols-3");
+        if (cols === 2) grid.classList.add("cols-2");
+    }
+
+    function runExercise(baiId) {
+        const item = exercises.find(e => e.id === baiId);
+        if (!item) return;
+        const results = item.run(window.prompt);
+        renderOutput(baiId, results);
+    }
+
+    function renderOutput(baiId, lines) {
+        const box = document.getElementById("out-" + baiId);
+        if (box) {
+            box.innerHTML = "";
+            lines.forEach(text => {
+                const line = document.createElement("div");
+                line.className = "line";
+                line.textContent = text;
+                box.appendChild(line);
+            });
+        }
+    }
+
+    function openModal(baiId) {
+        const item = exercises.find(e => e.id === baiId);
+        if (!item) return;
+
+        document.getElementById("modal-title").textContent = `Bài ${item.id} – ${item.title}`;
+        document.getElementById("modal-code").innerHTML = highlightJS(item.code);
+
+        const outBox = document.getElementById("out-" + item.id);
+        document.getElementById("modal-output").innerHTML = outBox ? outBox.innerHTML : "";
+
+        const copyBtn = document.getElementById("modal-copy-btn");
+        copyBtn.onclick = function() {
+            navigator.clipboard.writeText(item.code).then(() => {
+                copyBtn.textContent = "✓ Đã chép!";
+                setTimeout(() => { copyBtn.textContent = "Sao chép"; }, 1400);
+            });
+        };
+
+        const runBtn = document.getElementById("modal-run-btn");
+        runBtn.onclick = function() {
+            runExercise(item.id);
+            const updatedOut = document.getElementById("out-" + item.id);
+            document.getElementById("modal-output").innerHTML = updatedOut ? updatedOut.innerHTML : "";
+        };
+
+        document.getElementById("detail-modal").classList.add("active");
+    }
+
+    function closeModal(e) {
+        if (e.target.id === "detail-modal") {
+            document.getElementById("detail-modal").classList.remove("active");
+        }
+    }
+    function closeModalDirect() {
+        document.getElementById("detail-modal").classList.remove("active");
+    }
+
+    // Render Cards
+    const grid = document.getElementById("output-area");
+    exercises.forEach(ex => {
+        grid.innerHTML += `
+            <div class="card">
+                <div class="card-header">
+                    <span class="num">Bài ${ex.id}</span>
+                    <h3 title="${ex.title}">${ex.title}</h3>
+                </div>
+                <div class="card-body">
+                    <div class="block-title">
+                        <span>💻 Mã nguồn (Bai${ex.id}.js)</span>
+                        <div class="btn-group">
+                            <button class="action-btn" onclick="runExercise(${ex.id})" title="Chạy thử với dữ liệu nhập">▶ Chạy</button>
+                            <button class="action-btn" onclick="openModal(${ex.id})" title="Phóng to">🔍</button>
+                            <button class="action-btn" onclick="copyCode(${ex.id}, this)">Sao chép</button>
+                        </div>
+                    </div>
+                    <div class="code-container">
+                        <pre><code>${highlightJS(ex.code)}</code></pre>
+                    </div>
+
+                    <div class="block-title">
+                        <span>🖥️ Kết quả Output (In đậm)</span>
+                    </div>
+                    <div class="output-container" id="out-${ex.id}"></div>
+                </div>
+            </div>`;
+    });
+
+    // Tự động chạy lần đầu với giá trị mẫu trực quan
+    exercises.forEach(ex => {
+        const initialLines = ex.run(null);
+        renderOutput(ex.id, initialLines);
+    });
+</script>
+
+</body>
+</html>

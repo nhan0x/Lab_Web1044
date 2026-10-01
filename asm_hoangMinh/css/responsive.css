@@ -1,0 +1,71 @@
+/* ============================================================
+   14. RESPONSIVE BREAKPOINTS
+   ============================================================ */
+@media (max-width: 1024px) {
+    .shop-layout {
+        grid-template-columns: 1fr;
+    }
+    .shop-sidebar {
+        display: none; /* Hide sidebar on tablet, use filter drawer or pills */
+    }
+    .product-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .subcat-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .commitments-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .topbar-left, .header-action-text {
+        display: none;
+    }
+    .mobile-menu-toggle {
+        display: block;
+    }
+    .header-main {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .header-center {
+        order: 3;
+        max-width: 100%;
+        width: 100%;
+    }
+    .subcat-grid {
+        gap: 12px 16px;
+    }
+    .subcat-item {
+        min-width: 80px;
+    }
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    .product-info {
+        padding: 10px;
+    }
+    .product-title {
+        font-size: 12.5px;
+        height: 34px;
+    }
+    .current-price {
+        font-size: 14px;
+    }
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    .commitments-grid {
+        grid-template-columns: 1fr;
+    }
+    .quickview-grid {
+        grid-template-columns: 1fr;
+    }
+}

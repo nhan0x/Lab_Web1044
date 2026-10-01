@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luna | Thời trang</title>
+
+<!-- Google Fonts: Montserrat (hỗ trợ tiếng Việt) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap&subset=vietnamese" rel="stylesheet">
+
+<!-- Font Awesome 6  -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Header -->
+<header class="site-header" id="main-header">
+    <div class="site-header-inner">
+        <!-- BÊN TRÁI: NÚT HAMBURGER ☰ & LOGO -->
+        <div class="header-left">
+            <button class="hamburger-btn" onclick="header.toggleMenu()" title="Danh mục Menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <a class="logo-link" href="javascript:void(0)" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Luna">
+                <span class="brand-logo"><i class="fa-solid fa-moon"></i>Luna</span>
+            </a>
+        </div>
+
+        <div class="header-center">
+            <form class="brand-search-box" onsubmit="event.preventDefault(); productList.search(document.getElementById('header-search-input').value);">
+                <span class="brand-search-label">Tìm kiếm</span>
+                <div class="brand-search-input-wrap">
+                    <input id="header-search-input" type="text" class="brand-search-input" oninput="productList.search(this.value)">
+                    <button type="submit" class="brand-search-btn" title="Tìm Kiếm">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="header-right">
+            <!-- Gọi Ngay -->
+            <a class="header-action-item" href="javascript:void(0)" title="Gọi ngay">
+                <i class="fa-solid fa-phone"></i>
+                <span>Gọi Ngay</span>
+            </a>
+
+            <!-- Tài Khoản -->
+            <a class="header-action-item" href="javascript:void(0)" onclick="accountModal.open()" title="Đăng nhập / Đăng ký">
+                <i class="fa-regular fa-user"></i>
+                <span>Tài Khoản</span>
+            </a>
+
+            <!-- Giỏ Hàng (Icon Shopping Bag + Badge 0) -->
+            <a class="header-action-item" href="javascript:void(0)" onclick="cart.open()" title="Giỏ hàng của tôi">
+                <div class="icon-badge-box">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <span class="badge-number" id="cart-count">0</span>
+                </div>
+            </a>
+
+            <!-- Wishlist (Icon Heart + Badge 0) -->
+            <a class="header-action-item" href="javascript:void(0)" onclick="wishlist.showCount()" title="Danh sách yêu thích">
+                <div class="icon-badge-box">
+                    <i class="fa-regular fa-heart"></i>
+                    <span class="badge-number" id="wishlist-count">0</span>
+                </div>
+            </a>
+        </div>
+    </div>
+</header>
+
+<!-- Menu trượt -->
+<div class="menu-drawer-overlay" id="drawer-overlay" onclick="header.toggleMenu()"></div>
+<div class="menu-drawer" id="menu-drawer">
+    <div class="menu-drawer-header">
+        <span class="brand-logo brand-logo-sm"><i class="fa-solid fa-moon"></i>Luna</span>
+        <button class="menu-close-btn" onclick="header.toggleMenu()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <ul class="drawer-nav-list">
+        <li class="drawer-nav-item"><a onclick="Utils.scrollToSection('product-section'); header.toggleMenu();">Bộ sưu tập</a></li>
+        <li class="drawer-nav-item"><a onclick="productList.filterCategory('hot'); header.toggleMenu();">Gợi ý mua sắm từ nhân viên</a></li>
+        <li class="drawer-nav-item"><a onclick="Utils.scrollToSection('product-section'); header.toggleMenu();">Shop the look</a></li>
+        <li class="drawer-nav-item">
+            <a onclick="header.toggleSub('drawer-thoitrang')">Thời trang <i class="fa-solid fa-angle-down"></i></a>
+            <ul class="drawer-sub-list" id="drawer-thoitrang">
+                <li><a onclick="productList.filterSubCategory('Áo'); header.toggleMenu();">Áo</a></li>
+                <li><a onclick="productList.filterSubCategory('Đầm'); header.toggleMenu();">Đầm</a></li>
+                <li><a onclick="productList.filterSubCategory('Giày'); header.toggleMenu();">Giày</a></li>
+                <li><a onclick="productList.filterSubCategory('Túi'); header.toggleMenu();">Túi xách</a></li>
+            </ul>
+        </li>
+        <li class="drawer-nav-item">
+            <a onclick="header.toggleSub('drawer-urban')">Thời trang công sở <i class="fa-solid fa-angle-down"></i></a>
+            <ul class="drawer-sub-list" id="drawer-urban">
+                <li><a onclick="productList.filterSubCategory('Đầm'); header.toggleMenu();">Đầm công sở</a></li>
+                <li><a onclick="productList.filterSubCategory('Áo khoác'); header.toggleMenu();">Áo khoác</a></li>
+                <li><a onclick="productList.filterSubCategory('Túi'); header.toggleMenu();">Túi xách công sở</a></li>
+            </ul>
+        </li>
+        <li class="drawer-nav-item">
+            <a onclick="header.toggleSub('drawer-sale')" style="color:var(--brand-red);">Sale up to 50% <i class="fa-solid fa-angle-down"></i></a>
+            <ul class="drawer-sub-list" id="drawer-sale">
+                <li><a onclick="productList.filterCategory('hot'); header.toggleMenu();">Sản phẩm bán chạy</a></li>
+                <li><a onclick="productList.filterCategory('sale'); header.toggleMenu();">Sale 50% online</a></li>
+                <li><a onclick="productList.filterCategory('sale'); header.toggleMenu();">Đồng giá từ 99K</a></li>
+            </ul>
+        </li>
+        <li class="drawer-nav-item"><a onclick="Utils.showToast('Thẻ thành viên Luna Club'); header.toggleMenu();">Thẻ thành viên</a></li>
+        <li class="drawer-nav-item"><a onclick="Utils.showToast('Câu chuyện thương hiệu Luna'); header.toggleMenu();">Câu chuyện thương hiệu</a></li>
+        <li class="drawer-nav-item"><a onclick="Utils.showToast('Hệ thống cửa hàng Luna'); header.toggleMenu();">Hệ thống cửa hàng</a></li>
+        <li class="drawer-nav-item"><a onclick="Utils.showToast('Dịch vụ may đo đồng phục Luna'); header.toggleMenu();">May đo đồng phục</a></li>
+    </ul>
+</div>
+
+<!-- Slider banner: tự chuyển ảnh, có nút trước/sau và chấm tròn (xử lý trong js/slider.js) -->
+<section class="slider" id="hero-slider">
+    <div class="slide active">
+        <picture><source srcset="image/slide-1-mb.jpg" media="(max-width: 767px)"><img src="image/slide-1.jpg" alt="Banner 1"></picture>
+    </div>
+    <div class="slide">
+        <picture><source srcset="image/slide-2-mb.jpg" media="(max-width: 767px)"><img src="image/slide-2.jpg" alt="Banner 2"></picture>
+    </div>
+    <div class="slide">
+        <picture><source srcset="image/slide-3-mb.jpg" media="(max-width: 767px)"><img src="image/slide-3.jpg" alt="Banner 3"></picture>
+    </div>
+    <div class="slide">
+        <picture><source srcset="image/slide-4-mb.jpg" media="(max-width: 767px)"><img src="image/slide-4.jpg" alt="Banner 4"></picture>
+    </div>
+    <div class="slide">
+        <picture><source srcset="image/slide-5-mb.jpg" media="(max-width: 767px)"><img src="image/slide-5.jpg" alt="Banner 5"></picture>
+    </div>
+    <div class="slide">
+        <picture><source srcset="image/slide-6-mb.jpg" media="(max-width: 767px)"><img src="image/slide-6.jpg" alt="Banner 6"></picture>
+    </div>
+    <button class="slider-btn prev" aria-label="Ảnh trước"><i class="fa-solid fa-chevron-left"></i></button>
+    <button class="slider-btn next" aria-label="Ảnh sau"><i class="fa-solid fa-chevron-right"></i></button>
+    <div class="slider-dots"></div>
+</section>
+<!-- Social Links Row  -->
+<!-- Dán link của bạn vào href (thay javascript:void(0)); thêm target="_blank" nếu muốn mở tab mới -->
+<ul class="social-link">
+    <li>
+        <a href="javascript:void(0)" title="Facebook">
+            <i class="fa-brands fa-facebook-f"></i>
+            <span>Facebook</span>
+        </a>
+    </li>
+    <li>
+        <a href="javascript:void(0)" title="Instagram">
+            <i class="fa-brands fa-instagram"></i>
+            <span>Instagram</span>
+        </a>
+    </li>
+    <li>
+        <a href="javascript:void(0)" title="YouTube">
+            <i class="fa-brands fa-youtube"></i>
+            <span>YouTube</span>
+        </a>
+    </li>
+    <li>
+        <a href="javascript:void(0)" title="TikTok">
+            <i class="fa-brands fa-tiktok"></i>
+            <span>TikTok</span>
+        </a>
+    </li>
+    <li>
+        <a href="javascript:void(0)" title="Zalo">
+            <img src="image/zalo.png" alt="Zalo" class="social-img-icon">
+            <span>Zalo</span>
+        </a>
+    </li>
+</ul>
+
+<!-- Tiêu đề trang & Breadcrumb -->
+<div class="page-title-section" id="product-section">
+    <div class="breadcrumb-row">
+        <a href="javascript:void(0)" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">Trang chủ</a> / <span>Thời trang</span>
+    </div>
+    <div class="page-title-row">
+        <h1 class="page-main-title">Thời trang</h1>
+        <span class="product-counter" id="product-counter">Hiển thị 10 sản phẩm</span>
+    </div>
+</div>
+
+<!-- Bộ lọc danh mục (Filter Tabs) -->
+<div class="products-container">
+    <div class="filter-tabs-bar">
+        <button class="filter-tab-btn active" onclick="productList.filterCategory('all', this)">Tất cả</button>
+        <button class="filter-tab-btn" onclick="productList.filterCategory('new', this)">Hàng mới về</button>
+        <button class="filter-tab-btn" onclick="productList.filterCategory('hot', this)">Bán chạy</button>
+        <button class="filter-tab-btn" onclick="productList.filterCategory('sale', this)">Sale Online</button>
+    </div>
+
+    <!-- Lưới sản phẩm  -->
+    <div class="product-grid" id="main-product-grid"></div>
+</div>
+
+<!-- Footer -->
+<footer>
+    <div class="footer-grid">
+        <div class="footer-col">
+            <h4>Luna Fashion</h4>
+            <p>Luna - Thương hiệu thời trang dành cho phong cách năng động và hiện đại.</p>
+            <p>Hotline mua hàng: <strong>0900 000 000</strong></p>
+            <p>Hotline CSKH: <strong>0900 000 001</strong></p>
+        </div>
+        <div class="footer-col">
+            <h4>Danh mục</h4>
+            <ul>
+                <li><a onclick="productList.filterCategory('all')">Thời trang</a></li>
+                <li><a onclick="productList.filterSubCategory('Đầm')">Đầm</a></li>
+                <li><a onclick="productList.filterSubCategory('Áo')">Áo & Áo khoác</a></li>
+                <li><a onclick="productList.filterCategory('new')">Bộ sưu tập mới</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Hỗ trợ khách hàng</h4>
+            <ul>
+                <li><a href="javascript:void(0)" onclick="Utils.showToast('Chính sách mua hàng & giao nhận Luna')">Hướng dẫn mua hàng</a></li>
+                <li><a href="javascript:void(0)" onclick="Utils.showToast('Chính sách đổi trả trong 7 ngày')">Chính sách đổi trả</a></li>
+                <li><a href="javascript:void(0)" onclick="Utils.showToast('Quyền lợi thành viên VIP')">Chính sách thành viên</a></li>
+                <li><a href="javascript:void(0)" onclick="Utils.showToast('Xem danh sách cửa hàng')">Hệ thống cửa hàng</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Đăng ký bản tin</h4>
+            <p>Đăng ký để nhận sớm nhất thông báo các chương trình ưu đãi và sự kiện thời trang Luna.</p>
+            <div style="display:flex; gap:6px; margin-top:10px;">
+                <input type="text" placeholder="Email của bạn..." style="padding:10px 12px; border:1px solid #333; background:#222; color:#fff; flex:1; font-size:0.82rem;">
+                <button style="padding:10px 16px; background:#fff; border:none; color:#111; font-weight:700; cursor:pointer;" onclick="Utils.showToast('Đăng ký nhận tin thành công!')">Gửi</button>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        &copy; 2026 Luna Fashion. Đồ án môn Lập trình cơ sở với JavaScript (Web1044).
+    </div>
+</footer>
+
+<!-- Giỏ hàng -->
+<div class="cart-overlay" id="cart-overlay" onclick="cart.close()"></div>
+<div class="cart-drawer" id="cart-drawer">
+    <div class="cart-header">
+        <h3>Giỏ hàng của tôi</h3>
+        <button class="modal-close" onclick="cart.close()" style="position:static;">✕</button>
+    </div>
+    <div class="cart-items" id="cart-items"></div>
+    <div class="cart-footer">
+        <div class="cart-total">
+            <span>Tổng thanh toán:</span>
+            <span id="cart-total-price">0đ</span>
+        </div>
+        <button class="btn btn-primary" style="width:100%; padding:14px;" onclick="cart.checkout()">Tiến Hành Đặt Hàng</button>
+    </div>
+</div>
+
+<!-- Modal chi tiết sản phẩm -->
+<div class="modal-overlay" id="product-modal" onclick="productModal.closeOnOverlay(event)">
+    <div class="modal-box">
+        <button class="modal-close" onclick="productModal.close()">✕</button>
+        <div id="modal-body"></div>
+    </div>
+</div>
+
+<!-- Modal tài khoản -->
+<div class="modal-overlay" id="account-modal" onclick="accountModal.closeOnOverlay(event)">
+    <div class="modal-box account-modal-box">
+        <button class="modal-close" onclick="accountModal.close()">✕</button>
+        <h3>Đăng Nhập Tài Khoản</h3>
+        <p style="font-size:0.85rem; color:#666; margin-bottom:20px;">Đăng nhập để nhận ưu đãi thành viên Luna</p>
+        <form onsubmit="event.preventDefault(); Utils.showToast('Đăng nhập thành công!'); accountModal.close();">
+            <input type="text" placeholder="Email hoặc Số điện thoại" class="account-input" required>
+            <input type="password" placeholder="Mật khẩu" class="account-input" required>
+            <button type="submit" class="btn btn-primary" style="width:100%; padding:12px; margin-top:8px;">Đăng nhập</button>
+        </form>
+    </div>
+</div>
+
+<div id="toast"></div>
+
+<!-- Thứ tự nạp quan trọng: dữ liệu -> tiện ích -> các component -> app.js (khởi động) cuối cùng -->
+<script src="js/products.js"></script>      <!-- Dữ liệu sản phẩm -->
+<script src="js/utils.js"></script>         <!-- Hàm dùng chung, thông báo toast -->
+<script src="js/header.js"></script>        <!-- Header thu gọn khi cuộn, menu trượt -->
+<script src="js/slider.js"></script>        <!-- Slider banner -->
+<script src="js/wishlist.js"></script>      <!-- Yêu thích -->
+<script src="js/product-list.js"></script>  <!-- Lưới sản phẩm, lọc, tìm kiếm -->
+<script src="js/product-modal.js"></script> <!-- Cửa sổ chi tiết sản phẩm -->
+<script src="js/account-modal.js"></script> <!-- Cửa sổ tài khoản -->
+<script src="js/cart.js"></script>          <!-- Giỏ hàng -->
+<script src="js/form.js"></script>          <!-- Kiểm tra form (bạn tự viết) -->
+<script src="js/app.js"></script>           <!-- Khởi động -->
+
+
+</body>
+</html>

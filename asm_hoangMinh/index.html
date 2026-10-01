@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ĐỒ CÔNG NGHỆ - HoangMinh | Máy Game, Đồ Công Nghệ Chính Hãng</title>
+    
+    <!-- Google Fonts: Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Stylesheet chia theo khu vực giao diện -->
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/hero.css">
+    <link rel="stylesheet" href="css/shop.css">
+    <link rel="stylesheet" href="css/sections.css">
+    <link rel="stylesheet" href="css/modals.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+    <!-- 1. TOP BAR -->
+    <div class="site-topbar">
+        <div class="container topbar-inner">
+            <div class="topbar-left">
+                <div class="topbar-item">
+                    <i class="fa-solid fa-phone"></i>
+                    <span>Hotline: <b>0932 600 188</b></span>
+                </div>
+                <div class="topbar-item">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <span>Showroom: 92 Pasteur, Q.1 & 446 Hoàng Văn Thụ, Tân Bình, TP.HCM</span>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <a href="javascript:void(0)" class="topbar-link" onclick="showToast('Giờ mở cửa: 09:00 - 21:00 hàng ngày')">Giờ mở cửa: 9h - 21h</a>
+                <span>|</span>
+                <a href="javascript:void(0)" class="topbar-link" onclick="showToast('Vui lòng đăng nhập để tra cứu lịch sử đơn hàng')">Tra cứu đơn hàng</a>
+                <span>|</span>
+                <a href="javascript:void(0)" class="topbar-link" onclick="openAccountModal('login')">Hỗ trợ kỹ thuật</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. MAIN HEADER -->
+    <header class="site-header">
+        <div class="container header-main">
+            <!-- Left: Hamburger button (Mobile) & Logo -->
+            <div class="header-left">
+                <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Mở menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <a href="index.html" class="header-logo" title="HoangMinh - Máy game & Đồ công nghệ">
+                    <span class="logo-text">HoangMinh</span>
+                </a>
+            </div>
+
+            <!-- Center: Search Input -->
+            <div class="header-center">
+                <form class="search-box" onsubmit="event.preventDefault(); handleSearch(document.getElementById('header-search-input').value);">
+                    <input type="text" id="header-search-input" class="search-input" placeholder="Bạn tìm gì hôm nay (Adobe, Microsoft, Windows, Camtasia...)" oninput="handleSearch(this.value)">
+                    <button type="submit" class="search-btn">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Right: Actions (Hotline, Account, Wishlist, Cart) -->
+            <div class="header-right">
+                <!-- Hotline -->
+                <a href="tel:0932600188" class="header-action-item">
+                    <div class="header-action-icon">
+                        <i class="fa-solid fa-headset"></i>
+                    </div>
+                    <div class="header-action-text">
+                        <small>Tư vấn mua hàng</small>
+                        <span>0932 600 188</span>
+                    </div>
+                </a>
+
+                <!-- Account -->
+                <div class="header-action-item header-action-user" onclick="openAccountModal('login')" title="Tài khoản">
+                    <div class="header-action-icon">
+                        <i class="fa-regular fa-user"></i>
+                    </div>
+                    <div class="header-action-text">
+                        <small>Xin chào</small>
+                        <span>Tài khoản</span>
+                    </div>
+                </div>
+
+                <!-- Wishlist -->
+                <div class="header-action-item" onclick="showToast('Danh sách yêu thích của bạn đang có ' + getWishlist().length + ' sản phẩm')" title="Danh sách yêu thích">
+                    <div class="header-action-icon">
+                        <i class="fa-regular fa-heart"></i>
+                        <span class="badge-count" id="wishlist-badge" style="display:none;">0</span>
+                    </div>
+                </div>
+
+                <!-- Cart -->
+                <div class="header-action-item" onclick="openCart()" title="Giỏ hàng">
+                    <div class="header-action-icon">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                        <span class="badge-count cart-count-badge" style="display:none;">0</span>
+                    </div>
+                    <div class="header-action-text">
+                        <small>Giỏ hàng</small>
+                        <span id="header-cart-total" style="color:var(--halo-yellow);">0 đ</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 3. NAVIGATION MENU BAR -->
+
+    <!-- MAIN BODY CONTAINER -->
+    <main class="container">
+        
+        <!-- 4. HERO SLIDER BANNER -->
+        <section class="hero-slider-section">
+            <div class="slider-wrapper" id="hero-slider">
+                <div class="slide active">
+                    <img src="image/banner-hero-1.jpg" alt="HoangMinh Banner Khuyến Mãi 1">
+                </div>
+                <div class="slide">
+                    <img src="image/banner-hero-2.jpg" alt="HoangMinh Banner Khuyến Mãi 2">
+                </div>
+                <div class="slide">
+                    <img src="image/banner-hero-3.jpg" alt="HoangMinh Banner Khuyến Mãi 3">
+                </div>
+                <div class="slide">
+                    <img src="image/banner-hero-4.jpg" alt="HoangMinh Banner Khuyến Mãi 4">
+                </div>
+
+                <button class="slider-btn prev" aria-label="Banner trước"><i class="fa-solid fa-chevron-left"></i></button>
+                <button class="slider-btn next" aria-label="Banner kế tiếp"><i class="fa-solid fa-chevron-right"></i></button>
+                <div class="slider-dots"></div>
+            </div>
+        </section>
+
+        <!-- 5. SUB-CATEGORIES CIRCLES -->
+        <section class="subcat-section">
+            <div class="subcat-grid">
+                <div class="subcat-item" onclick="filterBrand('Microsoft')">
+                    <div class="subcat-icon"><img src="image/cat_apple.png" alt="Microsoft Office"></div>
+                    <span class="subcat-title">Microsoft 365</span>
+                </div>
+                <div class="subcat-item" onclick="filterBrand('BarTender')">
+                    <div class="subcat-icon"><img src="image/cat_digital_cards.png" alt="BarTender Barcode"></div>
+                    <span class="subcat-title">BarTender 2022</span>
+                </div>
+                <div class="subcat-item" onclick="filterCategory('smarthome')">
+                    <div class="subcat-icon"><img src="image/cat_may_game.png" alt="Smart Home"></div>
+                    <span class="subcat-title">Smart Home</span>
+                </div>
+                <div class="subcat-item" onclick="filterCategory('software')">
+                    <div class="subcat-icon"><img src="image/cat_phu_kien.png" alt="Phần mềm"></div>
+                    <span class="subcat-title">Windows & Server</span>
+                </div>
+                <div class="subcat-item" onclick="filterPrice('under-1m')">
+                    <div class="subcat-icon"><img src="image/cat_do_choi.png" alt="Giá tốt dưới 1tr"></div>
+                    <span class="subcat-title">Giá Rẻ Dưới 1Tr</span>
+                </div>
+                <div class="subcat-item" onclick="resetFilters()">
+                    <div class="subcat-icon"><img src="image/cat_may_game_cu.jpg" alt="Tất cả đồ công nghệ"></div>
+                    <span class="subcat-title">Xem Tất Cả</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. BREADCRUMB -->
+        <div class="shop-breadcrumb">
+            <a href="index.html"><i class="fa-solid fa-house"></i> Trang chủ</a>
+            <span>/</span>
+            <a href="javascript:void(0)" onclick="resetFilters()">SẢN PHẨM</a>
+            <span>/</span>
+            <span class="current">ĐỒ CÔNG NGHỆ</span>
+        </div>
+
+        <!-- 7. MAIN SHOP LAYOUT -->
+        <div class="shop-layout">
+            
+            <!-- LEFT SIDEBAR: FILTERS -->
+            <aside class="shop-sidebar">
+                
+                <!-- Filter by Brand -->
+                <div class="filter-card">
+                    <h3 class="filter-card-title">
+                        <span><i class="fa-solid fa-layer-group"></i> THƯƠNG HIỆU</span>
+                    </h3>
+                    <div class="filter-list">
+                        <div class="filter-item filter-brand-item active" onclick="filterBrand('all', this)">
+                            <span>Tất cả thương hiệu</span>
+                            <span class="count-pill">24</span>
+                        </div>
+                        <div class="filter-item filter-brand-item" onclick="filterBrand('Adobe', this)">
+                            <span>Adobe</span>
+                            <span class="count-pill">4</span>
+                        </div>
+                        <div class="filter-item filter-brand-item" onclick="filterBrand('Microsoft', this)">
+                            <span>Microsoft</span>
+                            <span class="count-pill">6</span>
+                        </div>
+                        <div class="filter-item filter-brand-item" onclick="filterBrand('BarTender', this)">
+                            <span>BarTender</span>
+                            <span class="count-pill">4</span>
+                        </div>
+                        <div class="filter-item filter-brand-item" onclick="filterBrand('TechSmith', this)">
+                            <span>TechSmith</span>
+                            <span class="count-pill">1</span>
+                        </div>
+                        <div class="filter-item filter-brand-item" onclick="filterBrand('Fender', this)">
+                            <span>Fender</span>
+                            <span class="count-pill">1</span>
+                        </div>
+                        <div class="filter-item filter-brand-item" onclick="filterBrand('Khác', this)">
+                            <span>Khác (Xiaomi, Google...)</span>
+                            <span class="count-pill">8</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filter by Price Range -->
+                <div class="filter-card">
+                    <h3 class="filter-card-title">
+                        <span><i class="fa-solid fa-filter-dollar"></i> MỨC GIÁ</span>
+                    </h3>
+                    <div class="filter-list">
+                        <div class="filter-item filter-price-item active" onclick="filterPrice('all', this)">
+                            <span>Tất cả mức giá</span>
+                        </div>
+                        <div class="filter-item filter-price-item" onclick="filterPrice('under-1m', this)">
+                            <span>Dưới 1.000.000 đ</span>
+                        </div>
+                        <div class="filter-item filter-price-item" onclick="filterPrice('1m-5m', this)">
+                            <span>Từ 1.000.000 - 5.000.000 đ</span>
+                        </div>
+                        <div class="filter-item filter-price-item" onclick="filterPrice('5m-10m', this)">
+                            <span>Từ 5.000.000 - 10.000.000 đ</span>
+                        </div>
+                        <div class="filter-item filter-price-item" onclick="filterPrice('over-10m', this)">
+                            <span>Trên 10.000.000 đ</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reset Button -->
+                <button class="btn-reset-filters-sidebar" onclick="resetFilters()">
+                    <i class="fa-solid fa-arrows-rotate"></i> Đặt lại tất cả bộ lọc
+                </button>
+
+            </aside>
+
+            <!-- RIGHT CONTENT: TOOLBAR & PRODUCT GRID -->
+            <section class="shop-content">
+                
+                <!-- Shop Toolbar -->
+                <div class="shop-toolbar">
+                    <div class="toolbar-left">
+                        <h1 class="page-heading-title">ĐỒ CÔNG NGHỆ</h1>
+                        <span class="product-counter-pill" id="product-counter">Hiển thị 24 sản phẩm</span>
+                    </div>
+
+                    <div class="toolbar-right">
+                        <!-- Quick Category Filter Pills -->
+                        <div class="quick-filter-pills">
+                            <button class="category-tab-btn active" onclick="filterCategory('all', this)">Tất cả</button>
+                            <button class="category-tab-btn" onclick="filterCategory('software', this)">Phần mềm bản quyền</button>
+                            <button class="category-tab-btn" onclick="filterCategory('smarthome', this)">Thiết bị thông minh</button>
+                        </div>
+
+                        <!-- Sort Dropdown -->
+                        <div class="sort-select-wrap">
+                            <label for="sort-select"><i class="fa-solid fa-arrow-down-short-wide"></i> Sắp xếp:</label>
+                            <select id="sort-select" class="sort-select" onchange="handleSort(this.value)">
+                                <option value="default">Thứ tự mặc định</option>
+                                <option value="price-asc">Giá: Thấp đến Cao</option>
+                                <option value="price-desc">Giá: Cao đến Thấp</option>
+                                <option value="name-asc">Tên: A đến Z</option>
+                                <option value="name-desc">Tên: Z đến A</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 8. LƯỚI SẢN PHẨM CHÍNH (Được tạo tự động bằng Javascript từ js/main.js) -->
+                <div class="product-grid" id="main-product-grid">
+                    <!-- Javascript sẽ render danh sách sản phẩm tại đây -->
+                </div>
+
+                <!-- 9. PHÂN TRANG -->
+                <div class="pagination-wrap">
+                    <button class="page-num-btn active" onclick="window.scrollTo({top: 400, behavior: 'smooth'});">1</button>
+                    <button class="page-num-btn" onclick="showToast('Bạn đang xem trang 1 với 24 sản phẩm.');">2</button>
+                    <button class="page-num-btn" onclick="showToast('Bạn đang xem trang 1 với 24 sản phẩm.');">3</button>
+                    <button class="page-num-btn" onclick="showToast('Đã ở trang đầu tiên.');"><i class="fa-solid fa-angle-right"></i></button>
+                </div>
+
+            </section>
+        </div>
+
+        <!-- 10. HoangMinh CAM KẾT & CHÍNH SÁCH -->
+        <section class="commitments-section">
+            <div class="commitments-grid">
+                <div class="commitment-card">
+                    <div class="commitment-icon"><i class="fa-solid fa-truck-fast"></i></div>
+                    <div class="commitment-info">
+                        <h4>Giao Hàng Siêu Tốc 2H</h4>
+                        <p>Nội thành TP.HCM nhận hàng trong 2 giờ</p>
+                    </div>
+                </div>
+                <div class="commitment-card">
+                    <div class="commitment-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                    <div class="commitment-info">
+                        <h4>100% Chính Hãng</h4>
+                        <p>Bảo hành đầy đủ theo tiêu chuẩn nhà sản xuất</p>
+                    </div>
+                </div>
+                <div class="commitment-card">
+                    <div class="commitment-icon"><i class="fa-solid fa-rotate-left"></i></div>
+                    <div class="commitment-info">
+                        <h4>1 Đổi 1 Trong 30 Ngày</h4>
+                        <p>Nếu sản phẩm phát sinh lỗi từ nhà sản xuất</p>
+                    </div>
+                </div>
+                <div class="commitment-card">
+                    <div class="commitment-icon"><i class="fa-solid fa-credit-card"></i></div>
+                    <div class="commitment-info">
+                        <h4>Trả Góp Lãi Suất 0%</h4>
+                        <p>Thủ tục đơn giản qua thẻ tín dụng và CCCD</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 11. GIỚI THIỆU DANH MỤC & THÔNG TIN HỖ TRỢ -->
+        <section class="seo-intro-card">
+            <h2>HoangMinh - THẾ GIỚI ĐỒ CÔNG NGHỆ CHÍNH HÃNG HÀNG ĐẦU VIỆT NAM</h2>
+            <p>
+                Chào mừng bạn đến với danh mục <b>ĐỒ CÔNG NGHỆ</b> tại HoangMinh. Tại đây, chúng tôi tự hào cung cấp các giải pháp công nghệ toàn diện từ các gói phần mềm bản quyền hàng đầu thế giới như Adobe Creative Cloud, Microsoft 365, Windows 11 Pro, phần mềm thiết kế tem nhãn BarTender 2022, quay phim màn hình TechSmith Camtasia đến các thiết bị gia dụng thông minh và phụ kiện smarthome từ Google Nest, Xiaomi,...
+            </p>
+            <p>
+                Với phương châm <i>"Chất lượng thật - Giá trị thật"</i>, HoangMinh luôn cam kết sản phẩm có nguồn gốc xuất xứ rõ ràng, chính sách kích hoạt bảo hành trọn đời và đội ngũ kỹ thuật viên giàu kinh nghiệm sẵn sàng hỗ trợ bạn 24/7.
+            </p>
+        </section>
+
+    </main>
+
+    <!-- 12. FOOTER -->
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <!-- Cột 1: Thông tin showroom -->
+            <div class="footer-col">
+                <h4>HỆ THỐNG CỬA HÀNG HoangMinh</h4>
+                <p><b>Showroom Quận 1:</b> 92 Pasteur, P. Bến Nghé, Quận 1, TP. Hồ Chí Minh</p>
+                <p><b>Showroom Tân Bình:</b> 446 Hoàng Văn Thụ, Phường 4, Q. Tân Bình, TP. Hồ Chí Minh</p>
+                <p><i class="fa-solid fa-phone" style="color:var(--halo-yellow);"></i> Hotline bán hàng: <b>0932 600 188</b></p>
+                <p><i class="fa-solid fa-headset" style="color:var(--halo-yellow);"></i> CSKH & Kỹ thuật: <b>028 7306 8666</b></p>
+                <p><i class="fa-solid fa-envelope" style="color:var(--halo-yellow);"></i> Email: sales@haloshop.vn</p>
+            </div>
+
+            <!-- Cột 2: Danh mục sản phẩm -->
+            <div class="footer-col">
+                <h4>DANH MỤC SẢN PHẨM</h4>
+                <ul class="footer-links-list">
+                    <li><a href="javascript:void(0)" onclick="filterCategory('all')">Máy Game PlayStation 5 & Nintendo</a></li>
+                    <li><a href="javascript:void(0)" onclick="filterBrand('Apple')">Hệ sinh thái Apple Chính Hãng</a></li>
+                    <li><a href="javascript:void(0)" onclick="filterBrand('Microsoft')">Microsoft Surface & Phụ Kiện</a></li>
+                    <li><a href="javascript:void(0)" onclick="filterCategory('software')">Phần Mềm Bản Quyền & Key Số</a></li>
+                    <li><a href="javascript:void(0)" onclick="filterCategory('smarthome')">Thiết Bị Smarthome & Camera</a></li>
+                </ul>
+            </div>
+
+            <!-- Cột 3: Hỗ trợ khách hàng -->
+            <div class="footer-col">
+                <h4>HỖ TRỢ KHÁCH HÀNG</h4>
+                <ul class="footer-links-list">
+                    <li><a href="javascript:void(0)" onclick="showToast('Hướng dẫn đặt hàng và mua sắm trực tuyến')">Hướng dẫn mua hàng</a></li>
+                    <li><a href="javascript:void(0)" onclick="showToast('Chính sách bảo hành chính hãng 12 tháng')">Chính sách bảo hành</a></li>
+                    <li><a href="javascript:void(0)" onclick="showToast('Chính sách 1 đổi 1 trong 30 ngày')">Chính sách đổi trả sản phẩm</a></li>
+                    <li><a href="javascript:void(0)" onclick="showToast('Chính sách giao hàng hỏa tốc trong 2h')">Quy định vận chuyển</a></li>
+                    <li><a href="javascript:void(0)" onclick="showToast('Hỗ trợ trả góp 0% qua thẻ tín dụng và CCCD')">Trả góp 0% lãi suất</a></li>
+                </ul>
+            </div>
+
+            <!-- Cột 4: Mạng xã hội & Bản tin -->
+            <div class="footer-col">
+                <h4>KẾT NỐI VỚI HoangMinh</h4>
+                <p>Theo dõi HoangMinh trên các kênh mạng xã hội để cập nhật ưu đãi sớm nhất:</p>
+                <div class="footer-social-row">
+                    <a href="https://www.facebook.com/lehoangminh051" target="_blank" title="Facebook HoangMinh">
+                        <span class="social-badge-text"><span class="social-badge-icon"><i class="fa-brands fa-facebook-f"></i></span>HOANGMINH</span>
+                    </a>
+                    <a href="javascript:void(0)" title="Zalo HoangMinh" onclick="showToast('Zalo Official HoangMinh: 0932 600 188')">
+                        <span class="social-badge-text"><span class="social-badge-icon" style="font-size:11px;font-weight:900;">Zalo</span>HOANGMINH</span>
+                    </a>
+                    <a href="javascript:void(0)" title="Hội PS5 Việt Nam" onclick="showToast('Cộng đồng PlayStation 5 Việt Nam')">
+                        <img src="image/hoi-ps5.webp" alt="Hội PS5" class="social-badge-img">
+                    </a>
+                </div>
+
+                <h4 style="margin-top:20px;">ĐĂNG KÝ NHẬN TIN ƯU ĐÃI</h4>
+                <form class="newsletter-box" onsubmit="handleNewsletter(event)">
+                    <input type="email" id="newsletter-input" class="newsletter-input" placeholder="Nhập địa chỉ email của bạn..." required>
+                    <button type="submit" class="newsletter-btn">GỬI</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container">
+                <p>© 2026 <b>HoangMinh.VN</b> - Bài tập Assignment môn <b>Lập trình cơ sở với JavaScript (WEB1044)</b> | Sinh viên thực hiện: <b>Hoàng Minh</b>.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 13. GIỎ HÀNG TRƯỢT (CART DRAWER) -->
+    <div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
+    <div class="cart-drawer" id="cart-drawer">
+        <div class="cart-drawer-header">
+            <h3><i class="fa-solid fa-bag-shopping"></i> GIỎ HÀNG CỦA BẠN</h3>
+            <button class="btn-close-drawer" onclick="closeCart()" aria-label="Đóng giỏ hàng">✕</button>
+        </div>
+
+        <div class="cart-items-container" id="cart-items-container">
+            <!-- Sản phẩm trong giỏ hàng sẽ được vẽ ở đây qua main.js -->
+        </div>
+
+        <div class="cart-drawer-footer">
+            <div class="cart-subtotal-row">
+                <span>Tổng tiền tạm tính:</span>
+                <span class="cart-total-amount" id="cart-drawer-total">0 đ</span>
+            </div>
+            <button class="btn-checkout-now" onclick="proceedToCheckout()">TIẾN HÀNH THANH TOÁN</button>
+        </div>
+    </div>
+
+    <!-- 14. MODAL XEM NHANH CHI TIẾT SẢN PHẨM (QUICK VIEW MODAL) -->
+    <div class="modal-wrap" id="quickview-modal">
+        <div class="modal-container">
+            <button class="modal-close-icon" onclick="closeQuickView()" aria-label="Đóng chi tiết">✕</button>
+            <div id="quickview-body">
+                <!-- Nội dung chi tiết sản phẩm vẽ ở đây qua main.js -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 15. MODAL TÀI KHOẢN (ĐĂNG NHẬP / ĐĂNG KÝ) -->
+    <div class="modal-wrap" id="account-modal">
+        <div class="modal-container auth-modal-container">
+            <button class="modal-close-icon" onclick="closeAccountModal()" aria-label="Đóng tài khoản">✕</button>
+            
+            <div class="auth-tabs">
+                <button class="auth-tab-btn active" id="tab-btn-login" onclick="switchAccountTab('login')">Đăng Nhập</button>
+                <button class="auth-tab-btn" id="tab-btn-register" onclick="switchAccountTab('register')">Đăng Ký</button>
+            </div>
+
+            <!-- Form Đăng nhập -->
+            <div id="login-form-wrap">
+                <form id="login-form" onsubmit="handleLoginForm(event)">
+                    <div class="form-group">
+                        <label for="login-email">Email hoặc Số điện thoại *</label>
+                        <input type="text" id="login-email" class="form-control" placeholder="user@gmail.com hoặc 0932...">
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Mật khẩu *</label>
+                        <input type="password" id="login-password" class="form-control" placeholder="Tối thiểu 6 ký tự">
+                    </div>
+                    <button type="submit" class="btn-submit-form">ĐĂNG NHẬP</button>
+                </form>
+            </div>
+
+            <!-- Form Đăng ký -->
+            <div id="register-form-wrap" style="display:none;">
+                <form id="register-form" onsubmit="handleRegisterForm(event)">
+                    <div class="form-group">
+                        <label for="reg-name">Họ và tên *</label>
+                        <input type="text" id="reg-name" class="form-control" placeholder="Nguyễn Văn A">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-email">Địa chỉ Email *</label>
+                        <input type="email" id="reg-email" class="form-control" placeholder="user@gmail.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-phone">Số điện thoại *</label>
+                        <input type="tel" id="reg-phone" class="form-control" placeholder="0932600188">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-password">Mật khẩu *</label>
+                        <input type="password" id="reg-password" class="form-control" placeholder="Tối thiểu 6 ký tự">
+                    </div>
+                    <button type="submit" class="btn-submit-form">TẠO TÀI KHOẢN</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 16. MODAL THANH TOÁN (CHECKOUT MODAL) -->
+    <div class="modal-wrap" id="checkout-modal">
+        <div class="modal-container checkout-modal-container">
+            <button class="modal-close-icon" onclick="closeCheckoutModal()" aria-label="Đóng thanh toán">✕</button>
+            <h2 style="font-size:18px; font-weight:800; margin-bottom:16px;"><i class="fa-solid fa-credit-card" style="color:var(--halo-yellow);"></i> THÔNG TIN ĐẶT HÀNG</h2>
+            
+            <div class="checkout-order-summary">
+                <h4 style="font-size:13px; font-weight:700; margin-bottom:8px;">TÓM TẮT ĐƠN HÀNG</h4>
+                <div id="checkout-order-items"></div>
+                <div class="checkout-total-row">
+                    <span>Tổng thanh toán:</span>
+                    <span id="checkout-order-total">0 đ</span>
+                </div>
+            </div>
+
+            <form id="checkout-form" onsubmit="handleCheckoutForm(event)">
+                <div class="form-group">
+                    <label for="checkout-name">Họ và tên người nhận *</label>
+                    <input type="text" id="checkout-name" class="form-control" placeholder="Ví dụ: Hoàng Minh">
+                </div>
+                <div class="form-group">
+                    <label for="checkout-phone">Số điện thoại giao hàng *</label>
+                    <input type="tel" id="checkout-phone" class="form-control" placeholder="Ví dụ: 0932600188">
+                </div>
+                <div class="form-group">
+                    <label for="checkout-address">Địa chỉ nhận hàng chi tiết *</label>
+                    <input type="text" id="checkout-address" class="form-control" placeholder="Số nhà, đường, phường, quận...">
+                </div>
+                <div class="form-group">
+                    <label for="checkout-note">Ghi chú giao hàng (nếu có)</label>
+                    <textarea id="checkout-note" class="form-control" rows="2" placeholder="Giao giờ hành chính hoặc hướng dẫn chỉ đường..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Phương thức thanh toán:</label>
+                    <select class="form-control">
+                        <option value="cod">Thanh toán khi nhận hàng (COD)</option>
+                        <option value="bank">Chuyển khoản ngân hàng (Vietcombank / Techcombank / QR)</option>
+                        <option value="installment">Trả góp lãi suất 0%</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-submit-form" style="background:var(--halo-red); color:#fff;">XÁC NHẬN ĐẶT HÀNG</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 17. MOBILE DRAWER MENU -->
+    <div class="mobile-overlay" id="mobile-drawer-overlay" onclick="toggleMobileMenu()"></div>
+    <div class="mobile-drawer" id="mobile-drawer">
+        <div class="mobile-drawer-header">
+            <span class="logo-text" style="font-size:26px;">HoangMinh</span>
+            <button class="btn-close-drawer" onclick="toggleMobileMenu()">✕</button>
+        </div>
+        <ul class="mobile-nav-list">
+            <li class="mobile-nav-item"><a href="index.html" onclick="toggleMobileMenu()"><i class="fa-solid fa-house"></i> Trang chủ</a></li>
+            <li class="mobile-nav-item"><a href="javascript:void(0)" onclick="filterCategory('all'); toggleMobileMenu()"><i class="fa-solid fa-gamepad"></i> Máy Game</a></li>
+            <li class="mobile-nav-item"><a href="javascript:void(0)" onclick="filterCategory('all'); toggleMobileMenu()"><i class="fa-solid fa-compact-disc"></i> Game</a></li>
+            <li class="mobile-nav-item"><a href="javascript:void(0)" onclick="filterBrand('Apple'); toggleMobileMenu()"><i class="fa-brands fa-apple"></i> Apple</a></li>
+            <li class="mobile-nav-item"><a href="javascript:void(0)" onclick="filterBrand('Microsoft'); toggleMobileMenu()"><i class="fa-brands fa-windows"></i> Surface</a></li>
+            <li class="mobile-nav-item"><a href="index.html" onclick="toggleMobileMenu()"><i class="fa-solid fa-microchip"></i> Đồ Công Nghệ</a></li>
+            <li class="mobile-nav-item"><a href="javascript:void(0)" onclick="filterCategory('all'); toggleMobileMenu()"><i class="fa-solid fa-headphones"></i> Phụ Kiện</a></li>
+            <li class="mobile-nav-item"><a href="javascript:void(0)" onclick="openAccountModal('login'); toggleMobileMenu()"><i class="fa-regular fa-user"></i> Tài khoản / Đăng nhập</a></li>
+        </ul>
+    </div>
+
+    <!-- 18. TOAST THÔNG BÁO -->
+    <div id="toast"></div>
+
+    <!-- CÁC FILE JAVASCRIPT ĐẶT TRONG THƯ MỤC JS THEO ĐÚNG YÊU CẦU MÔN HỌC -->
+    <script src="js/products.js"></script>
+    <script src="js/slider.js"></script>
+    <script src="js/form.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/modals.js"></script>
+
+</body>
+</html>

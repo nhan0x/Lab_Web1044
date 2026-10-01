@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab 4 - Mảng và Đối tượng</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f1f5f9; color: #1e293b; padding: 24px 16px 60px; }
+  header { text-align: center; margin-bottom: 24px; }
+  header h1 { font-size: 2rem; color: #0284c7; font-weight: 800; }
+  header p { color: #64748b; margin-top: 6px; }
+  .wrap { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+  .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,.05); }
+  .card-head { background: linear-gradient(135deg, #0284c7, #2563eb); color: #fff; padding: 10px 16px; display: flex; align-items: center; gap: 10px; }
+  .card-head .num { background: rgba(255,255,255,.22); font-size: .78rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+  .card-head h3 { flex: 1; font-size: 1rem; font-weight: 600; }
+  .card-head .file { font-family: Consolas, monospace; font-size: .8rem; opacity: .85; }
+  .card-body { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 14px; }
+  @media (max-width: 800px) { .card-body { grid-template-columns: 1fr; } }
+  .col-title { display: flex; justify-content: space-between; align-items: center; font-size: .75rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
+  .btn { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 3px 10px; border-radius: 5px; font-size: .72rem; font-weight: 600; cursor: pointer; margin-left: 4px; }
+  .btn:hover { background: #e2e8f0; }
+  pre { background: #0f172a; color: #e2e8f0; border-radius: 8px; padding: 12px 14px; height: 340px; overflow: auto; font: 13px/1.55 Consolas, monospace; white-space: pre; tab-size: 2; }
+  pre.out { background: #022c22; color: #a7f3d0; white-space: pre-wrap; word-break: break-word; }
+  pre.out .err { color: #fca5a5; }
+  .cm { color: #64748b; }
+  .kw { color: #c084fc; }
+  .st { color: #86efac; }
+  .nu { color: #fdba74; }
+</style>
+</head>
+<body>
+<header>
+  <h1>📚 Lab 4 – Mảng &amp; Đối tượng trong JavaScript</h1>
+  <p>Sinh viên: <strong style="color:#0284c7">Nguyễn Thiện Nhân</strong> | Web1044</p>
+</header>
+<div class="wrap" id="list"></div>
+
+<script>
+const exercises = [{"id":1,"title":"Danh sách mua sắm (shoppingList)","file":"bai1.js","code":"// \nlet shoppingList = [\"Trứng\", \"Thịt\", \"Rau\"];\n\n// a) \nconsole.log(\"a) Số lượng mặt hàng ban đầu:\", shoppingList.length);\n\n// b) \nshoppingList.push(\"Sữa\");\n\n// c) \nshoppingList.unshift(\"Bánh mì\");\n\n// d)\nlet removedItem = shoppingList.pop();\nconsole.log(\"d) Mặt hàng bị xóa:\", removedItem);\n\n// e)\nconsole.log(\"e) Mặt hàng thứ 2:\", shoppingList[1]);"},{"id":2,"title":"Lọc & biến đổi mảng số","file":"bai2.js","code":"const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // Mảng mẫu\n\n// a)\nconst evenNumbers = numbers.filter(num => num % 2 === 0);\nconsole.log(\"a) Mảng số chẵn:\", evenNumbers);\n\n// b)\nconst doubledEvenNumbers = evenNumbers.map(num => num * 2);\nconsole.log(\"b) Mảng số chẵn gấp đôi:\", doubledEvenNumbers);"},{"id":3,"title":"Danh sách sinh viên (a–e)","file":"bai3.js","code":"const students = [\n  { name: \"An\", score: 8.2 },\n  { name: \"Bình\", score: 7.5 },\n  { name: \"Chi\", score: 9.1 },\n  { name: \"Duy\", score: 6.8 },\n  { name: \"Hà\", score: 8.7 },\n  { name: \"Khánh\", score: 5.9 },\n  { name: \"Lan\", score: 7.8 },\n  { name: \"Minh\", score: 9.4 },\n  { name: \"Ngọc\", score: 6.5 },\n  { name: \"Quân\", score: 8.0 }\n];\n\n// a) \nconst topStudents = students.filter(student => student.score > 8);\nconsole.log(\"a) Học sinh có điểm > 8:\", topStudents);\n\n// b)\nconst highestStudent = students.reduce((max, student) => \n  student.score > max.score ? student : max\n, students[0]);\nconsole.log(\"b) Học sinh có điểm cao nhất:\", highestStudent);\n\n// c)\nconst totalScore = students.reduce((sum, student) => sum + student.score, 0);\nconst averageScore = totalScore / students.length;\nconsole.log(\"c) Điểm trung bình cả lớp:\", averageScore.toFixed(2));\n\n// d) \nconst studentNames = students.map(student => student.name);\nconsole.log(\"d) Danh sách tên học sinh:\", studentNames);\n\n// e) \nconst sortedStudents = [...students].sort((a, b) => b.score - a.score);\nconsole.log(\"e) Danh sách sau khi sắp xếp giảm dần:\", sortedStudents);"},{"id":4,"title":"Sắp xếp sản phẩm theo giá","file":"bai4.js","code":"const products = [\n  { name: \"Laptop\", price: 1200 },\n  { name: \"Mouse\", price: 30 },\n  { name: \"Keyboard\", price: 75 },\n  { name: \"Monitor\", price: 300 }\n];\n\n// a)\nproducts.sort((a, b) => a.price - b.price);\n\n// b)\nconsole.log(\"Mảng sản phẩm theo giá tăng dần:\", products);"},{"id":5,"title":"Tự đặt bài toán: Giỏ hàng","file":"bai5.js","code":"// Đặt bài toán: Một giỏ hàng gồm nhiều mặt hàng (tên, giá, số lượng)\nconst cart = [\n  { name: \"Áo sơ mi\", price: 250, quantity: 2 },\n  { name: \"Quần jean\", price: 500, quantity: 1 },\n  { name: \"Tất\", price: 20, quantity: 5 }\n];\n\n// 1. \nconst totalPrice = cart.reduce((total, item) => total + (item.price * item.quantity), 0);\nconsole.log(\"Tổng giá trị giỏ hàng:\", totalPrice);\n\n// 2. \nconst bulkItems = cart.filter(item => item.quantity > 1);\nconsole.log(\"Các mặt hàng mua nhiều hơn 1 sản phẩm:\", bulkItems);"},{"id":6,"title":"Fake data sinh viên","file":"bai6.js","code":"const fakeStudents = [\n  { id: \"SV001\", name: \"Nguyễn Văn An\", gender: \"Nam\", score: 8.5, age: 20 },\n  { id: \"SV002\", name: \"Trần Thị Bích\", gender: \"Nữ\", score: 7.2, age: 19 },\n  { id: \"SV003\", name: \"Nguyễn Thiện Nhân\", gender: \"Nam\", score: 9.1, age: 21 },\n  \n];\n\nconsole.log(\"Số lượng sinh viên tạo ra:\", fakeStudents.length);"}];
+
+function esc(s) { return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+
+function highlight(code) {
+  return esc(code).replace(/(\/\/.*$)|("[^"\n]*"|'[^'\n]*')|\b(const|let|var|function|return|if|else|for|new)\b|\b(\d+(?:\.\d+)?)\b/gm,
+    (m, c, s, k, n) => c ? '<span class="cm">' + m + '</span>' : s ? '<span class="st">' + m + '</span>' : k ? '<span class="kw">' + m + '</span>' : '<span class="nu">' + m + '</span>');
+}
+
+function fmt(v) {
+  if (typeof v === "string") return v;
+  try { return JSON.stringify(v, null, 2); } catch (e) { return String(v); }
+}
+
+function run(code) {
+  const lines = [];
+  const fakeConsole = { log: (...a) => lines.push(a.map(fmt).join(" ")) };
+  try { new Function("console", code)(fakeConsole); }
+  catch (e) { lines.push('<<ERR>>' + e.message); }
+  return lines;
+}
+
+function show(outEl, code) {
+  outEl.innerHTML = run(code).map(l => l.startsWith("<<ERR>>") ? '<span class="err">Lỗi: ' + esc(l.slice(7)) + '</span>' : esc(l)).join("\n") || "(không có output)";
+}
+
+const list = document.getElementById("list");
+exercises.forEach(ex => {
+  const card = document.createElement("div");
+  card.className = "card";
+  card.innerHTML =
+    '<div class="card-head"><span class="num">Bài ' + ex.id + '</span><h3>' + esc(ex.title) + '</h3><span class="file">' + ex.file + '</span></div>' +
+    '<div class="card-body">' +
+      '<div><div class="col-title"><span>💻 Mã nguồn</span><span><button class="btn copy">Sao chép</button></span></div><pre><code>' + highlight(ex.code) + '</code></pre></div>' +
+      '<div><div class="col-title"><span>🖥️ Kết quả</span><span><button class="btn rerun">▶ Chạy lại</button></span></div><pre class="out"></pre></div>' +
+    '</div>';
+  const out = card.querySelector(".out");
+  show(out, ex.code);
+  card.querySelector(".rerun").onclick = () => show(out, ex.code);
+  card.querySelector(".copy").onclick = e => {
+    navigator.clipboard.writeText(ex.code).then(() => { e.target.textContent = "Đã chép ✓"; setTimeout(() => e.target.textContent = "Sao chép", 1500); });
+  };
+  list.appendChild(card);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 1 – Bài Tập Trên Lớp – Nguyễn Thiện Nhân</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f1f5f9;
+            padding: 24px 16px 60px;
+            color: #1e293b;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+        .tag-school {
+            display: inline-block;
+            background: #e0f2fe;
+            color: #0369a1;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 4px 14px;
+            border-radius: 20px;
+            margin-bottom: 8px;
+        }
+        header h1 {
+            font-size: 2.1rem;
+            color: #0369a1;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        header p {
+            color: #64748b;
+            margin-top: 6px;
+            font-size: 1.05rem;
+        }
+
+        /* Container & Grid */
+        .container {
+            width: 100%;
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 18px;
+            padding: 0 4px;
+        }
+        .section-header h2 {
+            font-size: 1.3rem;
+            color: #1e293b;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .badge-count {
+            background: #e0f2fe;
+            color: #0284c7;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+        }
+        @media (max-width: 1100px) {
+            .grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+        @media (max-width: 700px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Card bài tập */
+        .card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 16px rgba(2, 132, 199, 0.06);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 28px rgba(2, 132, 199, 0.14);
+        }
+
+        /* Header của từng Card */
+        .card-header {
+            background: linear-gradient(135deg, #0284c7, #2563eb);
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #ffffff;
+        }
+        .card-header .num {
+            background: rgba(255, 255, 255, 0.22);
+            color: #ffffff;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+        .card-header h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #ffffff;
+            flex: 1;
+        }
+
+        /* Body của Card */
+        .card-body {
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex: 1;
+            background: #ffffff;
+        }
+
+        /* Tiêu đề mục nhỏ (Mã nguồn / Output) */
+        .block-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.76rem;
+            font-weight: 700;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .btn-group {
+            display: flex;
+            gap: 6px;
+        }
+        .action-btn {
+            background: #f0f9ff;
+            color: #0284c7;
+            border: 1px solid #bae6fd;
+            padding: 3px 9px;
+            border-radius: 6px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .action-btn:hover {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        /* Khung hiển thị Source Code */
+        .code-container {
+            background: #0f172a;
+            border-radius: 10px;
+            padding: 14px 16px 10px 16px;
+            height: 310px;
+            overflow: auto;
+            position: relative;
+            scrollbar-width: thin;
+            scrollbar-color: #64748b #1e293b;
+        }
+        .code-container pre {
+            margin: 0;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.84rem;
+            line-height: 1.6;
+            color: #e2e8f0;
+            white-space: pre;
+            padding-bottom: 6px;
+        }
+
+        /* Thanh trượt ngang to, rõ nét */
+        .code-container::-webkit-scrollbar {
+            width: 9px;
+            height: 11px;
+        }
+        .code-container::-webkit-scrollbar-track {
+            background: #1e293b;
+            border-radius: 6px;
+            margin: 2px 4px;
+        }
+        .code-container::-webkit-scrollbar-thumb {
+            background: #64748b;
+            border-radius: 6px;
+            border: 2px solid #1e293b;
+        }
+        .code-container::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+            cursor: grab;
+        }
+        .code-container::-webkit-scrollbar-thumb:active {
+            background: #cbd5e1;
+            cursor: grabbing;
+        }
+
+        /* Tô màu cú pháp (Syntax Highlight) */
+        .kw      { color: #c084fc; font-weight: 600; }
+        .fn      { color: #60a5fa; font-weight: 600; }
+        .str     { color: #34d399; }
+        .num-val { color: #fbbf24; }
+        .com     { color: #94a3b8; font-style: italic; }
+
+        /* Khung hiển thị Output Console in đậm nổi bật */
+        .output-container {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-left: 4px solid #0284c7;
+            border-radius: 8px;
+            padding: 12px 14px;
+            height: 140px;
+            overflow: auto;
+            font-family: 'Consolas', monospace;
+            font-size: 0.86rem;
+            line-height: 1.65;
+            color: #0f172a;
+            font-weight: 700;
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e1 #f1f5f9;
+        }
+        .output-container::-webkit-scrollbar {
+            width: 7px;
+            height: 7px;
+        }
+        .output-container::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+        .output-container::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .output-container .line {
+            word-break: break-word;
+            font-weight: 700;
+            color: #0f172a;
+        }
+        .output-container .line::before {
+            content: "❯ ";
+            color: #0284c7;
+            font-weight: 800;
+        }
+
+        /* Modal Phóng To */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-card {
+            background: #ffffff;
+            width: 100%;
+            max-width: 820px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            display: flex;
+            flex-direction: column;
+            max-height: 90vh;
+        }
+        .modal-header {
+            background: linear-gradient(135deg, #0284c7, #2563eb);
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #ffffff;
+        }
+        .modal-header h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+        .modal-close {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: #ffffff;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-body {
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .modal-code-container {
+            background: #0f172a;
+            border-radius: 10px;
+            padding: 16px;
+            max-height: 400px;
+            overflow: auto;
+        }
+        .modal-code-container pre {
+            font-family: 'Consolas', monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #e2e8f0;
+        }
+        .modal-output-container {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-left: 5px solid #0284c7;
+            border-radius: 10px;
+            padding: 14px 16px;
+            font-family: 'Consolas', monospace;
+            font-size: 0.95rem;
+            line-height: 1.65;
+            color: #0f172a;
+            font-weight: 700;
+        }
+        .modal-output-container .line {
+            font-weight: 700;
+            color: #0f172a;
+        }
+        .modal-output-container .line::before {
+            content: "❯ ";
+            color: #0284c7;
+            font-weight: 800;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🏫 Lab 1 – Bài Tập Trên Lớp (JavaScript Cơ Bản)</h1>
+    <p>Sinh viên: <strong style="color:#0369a1">Nguyễn Thiện Nhân</strong> | Web1044</p>
+</header>
+
+<div class="container">
+    <div class="section-header">
+        <h2>📋 Danh sách bài thực hành tại lớp</h2>
+        <span class="badge-count">3 Bài thực hành · Bố cục 3 Card</span>
+    </div>
+    <div class="grid" id="output-area"></div>
+</div>
+
+<!-- Modal Phóng to -->
+<div class="modal-overlay" id="detail-modal" onclick="closeModal(event)">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3 id="modal-title">Chi tiết bài tập</h3>
+            <button class="modal-close" onclick="closeModalDirect()">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="block-title">
+                <span>💻 Mã nguồn</span>
+                <button class="action-btn" id="modal-copy-btn">Sao chép</button>
+            </div>
+            <div class="modal-code-container">
+                <pre><code id="modal-code"></code></pre>
+            </div>
+
+            <div class="block-title">
+                <span>🖥️ Kết quả Output</span>
+            </div>
+            <div class="modal-output-container" id="modal-output"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Dữ liệu 3 bài Lab trên trường
+    const exercises = [
+        {
+            id: 1,
+            title: "Thông tin sinh viên (camelCase)",
+            code: `// Quy tắt đặt tên biến camelCase 
+let studentID = "Ty00234";
+let fullName = "Nguyễn Thiện Nhân";
+let dateOfBirth = "04/12/2009";
+let placeOfBirth = "Bà Rịa - Vũng Tàu";
+let major = "Sinh viên";
+
+console.log("studentID:", studentID);
+console.log("fullName:", fullName);
+console.log("dateOfBirth:", dateOfBirth);
+console.log("placeOfBirth:", placeOfBirth);
+console.log("major:", major);`
+        },
+        {
+            id: 2,
+            title: "Kiểu dữ liệu nguyên thủy (Primitive Types)",
+            code: `// Xác định kiểu dữ liệu của các biến sau: 
+let salary = 1000.5;
+// kiểu data primitive numbers
+var isActive = true;
+// Data type Boolean
+let nothing = null;
+// DataType null
+const notDefined = undefined;
+// Datatype undefined
+
+console.log("salary:", salary, "(typeof:", typeof salary, ")");
+console.log("isActive:", isActive, "(typeof:", typeof isActive, ")");
+console.log("nothing:", nothing, "(typeof:", typeof nothing, ")");
+console.log("notDefined:", notDefined, "(typeof:", typeof notDefined, ")");`
+        },
+        {
+            id: 3,
+            title: "Chuyển đổi kiểu dữ liệu (Type Conversion)",
+            code: `// Kết quả 105
+console.log("10" + 5);
+// kết quả 5
+console.log("10" - 5);
+// -> Kết quả: 20 (number)
+console.log(Number("20"));
+//-> Kết quả: "123" (string)
+console.log(String(123));
+//-> Kết quả: false (boolean)
+console.log(Boolean(""));
+// Toán tử Unary (+) ép chuỗi "123" thành số 123 -> Kết quả: 123 (number)
+console.log(+"123");
+// Trick: Nếu gặp toán tử (+) thì sẽ là ép tất cả sang kiểu chuỗi và nối tiếp nhau.Còn các toán tử còn lại đều trả về kiểu dữ liệu numbers.
+
+// 2. ĐỀ XUẤT CÁCH SỬA LỖI (ÉP KIỂU ĐỂ TRÁNH LỖI LOGIC):
+
+// Cách 1: Sử dụng hàm Number()
+console.log(\`Sửa lỗi bằng Number():\`, Number("10") + 5);
+//Cách 2: Sử dụng parseInt()
+console.log(\`Sửa lỗi bằng parseInt():\`, parseInt("10") + 5);
+// Cách 3: Sử dụng toán tử Unary (+)
+console.log(\`Sửa lỗi bằng toán tử Unary (+):\`, +"10" + 5);`
+        }
+    ];
+
+    function escapeHtml(str) {
+        return str
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
+    }
+
+    function highlightJS(code) {
+        const tokenRegex = /(\/\/[^\n]*)|(`(?:\\.|[^`])*`|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')|\b(console\.log|console)\b|\b(let|const|var|typeof|try|catch|function|return|if|else)\b|\b(\d+(?:\.\d+)?)\b/g;
+
+        let lastIndex = 0;
+        let result = "";
+        let match;
+
+        while ((match = tokenRegex.exec(code)) !== null) {
+            result += escapeHtml(code.slice(lastIndex, match.index));
+            lastIndex = tokenRegex.lastIndex;
+
+            if (match[1]) {
+                result += `<span class="com">${escapeHtml(match[1])}</span>`;
+            } else if (match[2]) {
+                result += `<span class="str">${escapeHtml(match[2])}</span>`;
+            } else if (match[3]) {
+                result += `<span class="fn">${escapeHtml(match[3])}</span>`;
+            } else if (match[4]) {
+                result += `<span class="kw">${escapeHtml(match[4])}</span>`;
+            } else if (match[5]) {
+                result += `<span class="num-val">${escapeHtml(match[5])}</span>`;
+            }
+        }
+        result += escapeHtml(code.slice(lastIndex));
+        return result;
+    }
+
+    function copyCode(baiId, btn) {
+        const item = exercises.find(e => e.id === baiId);
+        if (!item) return;
+        navigator.clipboard.writeText(item.code).then(() => {
+            const originalText = btn.textContent;
+            btn.textContent = "✓ Đã chép!";
+            btn.style.background = "#dcfce7";
+            btn.style.color = "#15803d";
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.background = "";
+                btn.style.color = "";
+            }, 1400);
+        });
+    }
+
+    function openModal(baiId) {
+        const item = exercises.find(e => e.id === baiId);
+        if (!item) return;
+
+        document.getElementById("modal-title").textContent = `Bài ${item.id} – ${item.title}`;
+        document.getElementById("modal-code").innerHTML = highlightJS(item.code);
+
+        const outBox = document.getElementById("out-" + item.id);
+        document.getElementById("modal-output").innerHTML = outBox ? outBox.innerHTML : "";
+
+        const copyBtn = document.getElementById("modal-copy-btn");
+        copyBtn.onclick = function() {
+            navigator.clipboard.writeText(item.code).then(() => {
+                copyBtn.textContent = "✓ Đã chép!";
+                setTimeout(() => { copyBtn.textContent = "Sao chép"; }, 1400);
+            });
+        };
+
+        document.getElementById("detail-modal").classList.add("active");
+    }
+
+    function closeModal(e) {
+        if (e.target.id === "detail-modal") {
+            document.getElementById("detail-modal").classList.remove("active");
+        }
+    }
+    function closeModalDirect() {
+        document.getElementById("detail-modal").classList.remove("active");
+    }
+
+    // Render Cards
+    const grid = document.getElementById("output-area");
+    exercises.forEach(ex => {
+        grid.innerHTML += `
+            <div class="card">
+                <div class="card-header">
+                    <span class="num">Bài ${ex.id}</span>
+                    <h3 title="${ex.title}">${ex.title}</h3>
+                </div>
+                <div class="card-body">
+                    <div class="block-title">
+                        <span>💻 Mã nguồn (Bai${ex.id}.js)</span>
+                        <div class="btn-group">
+                            <button class="action-btn" onclick="openModal(${ex.id})">🔍 Phóng to</button>
+                            <button class="action-btn" onclick="copyCode(${ex.id}, this)">Sao chép</button>
+                        </div>
+                    </div>
+                    <div class="code-container">
+                        <pre><code>${highlightJS(ex.code)}</code></pre>
+                    </div>
+
+                    <div class="block-title">
+                        <span>🖥️ Kết quả Output</span>
+                    </div>
+                    <div class="output-container" id="out-${ex.id}"></div>
+                </div>
+            </div>`;
+    });
+
+    // Bắt console.log
+    let currentBai = 0;
+    const _log = console.log;
+    console.log = function (...args) {
+        _log.apply(console, args);
+        const text = args.map(arg => typeof arg === 'object' ? JSON.stringify(arg) : String(arg)).join(" ");
+        const box = document.getElementById("out-" + currentBai);
+        if (box) {
+            const line = document.createElement("div");
+            line.className = "line";
+            line.textContent = text;
+            box.appendChild(line);
+        }
+    };
+</script>
+
+<!-- Nhúng từng file bài tập của Lab1 -->
+<script>currentBai = 1;</script>
+<script src="Bai1.js"></script>
+
+<script>currentBai = 2;</script>
+<script src="Bai2.js"></script>
+
+<script>currentBai = 3;</script>
+<script src="Bai3.js"></script>
+
+</body>
+</html>
