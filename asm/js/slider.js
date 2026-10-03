@@ -49,19 +49,6 @@ class Slider {
         this.root.addEventListener("mouseleave", () => this.start());
         document.addEventListener("visibilitychange", () => { document.hidden ? this.stop() : this.start(); });
 
-        // Vuốt trái/phải trên điện thoại
-        this.root.addEventListener("touchstart", e => {
-            this.touchStartX = e.touches[0].clientX;
-            this.stop();
-        }, { passive: true });
-        this.root.addEventListener("touchend", e => {
-            if (this.touchStartX !== null) {
-                const dx = e.changedTouches[0].clientX - this.touchStartX;
-                if (Math.abs(dx) > 40) this.goTo(this.current + (dx < 0 ? 1 : -1));
-                this.touchStartX = null;
-            }
-            this.start();
-        });
     }
 }
 

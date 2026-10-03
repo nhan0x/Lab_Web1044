@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nhân viên | Luna</title>
+
+<!-- Google Fonts: Montserrat (hỗ trợ tiếng Việt) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap&subset=vietnamese" rel="stylesheet">
+
+<!-- Font Awesome 6  -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Header (kiểu elise.vn): ☰ + logo | TÌM KIẾM ____ | Gọi Ngay, Tài Khoản, túi hàng, yêu thích -->
+<header class="site-header" id="main-header">
+    <div class="site-header-inner">
+        <div class="header-left">
+            <button class="hamburger-btn" onclick="header.toggleMenu()" title="Danh mục"><svg class="hd-icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+            <a class="logo-link" href="index.html" title="Luna">
+                <span class="brand-logo"><svg class="brand-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><span class="brand-name">Luna</span></span>
+            </a>
+        </div>
+
+        <div class="header-center">
+            <form class="brand-search-box" onsubmit="event.preventDefault(); productList.search(document.getElementById('header-search-input').value);">
+                <span class="brand-search-label">Tìm kiếm</span>
+                <input id="header-search-input" type="text" class="brand-search-input">
+                <button type="submit" class="brand-search-btn" title="Tìm kiếm"><svg class="hd-icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7"/><line x1="15.8" y1="15.8" x2="21" y2="21"/></svg></button>
+            </form>
+        </div>
+
+        <div class="header-right">
+            <a class="header-action-item" href="tel:0900000000" title="Gọi ngay"><svg class="hd-icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span>Gọi Ngay</span></a>
+            <!-- Đã đăng nhập: rê chuột vào hiện menu Tài Khoản / Đăng Xuất -->
+            <div class="header-account">
+                <a class="header-action-item" href="javascript:void(0)" onclick="auth.onAccountClick()" title="Tài khoản"><svg class="hd-icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="7.5" r="4"/><path d="M4 21v-1.5A5.5 5.5 0 0 1 9.5 14h5a5.5 5.5 0 0 1 5.5 5.5V21"/></svg><span id="account-label">Tài Khoản</span></a>
+                <div class="account-dropdown">
+                    <a href="account.html">Tài Khoản</a>
+                    <a href="javascript:void(0)" onclick="auth.logout()">Đăng Xuất</a>
+                </div>
+            </div>
+            <a class="header-icon-item" href="cart.html" title="Giỏ hàng"><svg class="hd-icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7.5h14l-1 13.5H6z"/><path d="M8.5 9.5V6.5a3.5 3.5 0 0 1 7 0v3"/></svg><span class="badge-number" id="cart-count">0</span></a>
+            <a class="header-icon-item" href="wishlist.html" title="Sản phẩm yêu thích"><svg class="hd-icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="badge-number" id="wishlist-count">0</span></a>
+        </div>
+    </div>
+</header>
+
+<!-- Menu trượt -->
+<div class="menu-drawer-overlay" id="drawer-overlay" onclick="header.toggleMenu()"></div>
+<div class="menu-drawer" id="menu-drawer">
+    <div class="menu-drawer-header">
+        <span class="brand-logo brand-logo-sm"><i class="fa-solid fa-moon"></i>Luna</span>
+        <button class="menu-close-btn" onclick="header.toggleMenu()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <ul class="drawer-nav-list">
+        <li class="drawer-nav-item"><a onclick="location.href='index.html#product-section';">Bộ sưu tập</a></li>
+        <li class="drawer-nav-item"><a href="staff.html?tab=snap">Gợi ý mua sắm từ nhân viên</a></li>
+        <li class="drawer-nav-item"><a onclick="location.href='index.html#product-section';">Shop the look</a></li>
+        <li class="drawer-nav-item">
+            <a onclick="header.toggleSub('drawer-thoitrang')">Thời trang <i class="fa-solid fa-angle-down"></i></a>
+            <ul class="drawer-sub-list" id="drawer-thoitrang">
+                <li><a onclick="productList.filterSubCategory('Áo'); header.toggleMenu();">Áo</a></li>
+                <li><a onclick="productList.filterSubCategory('Đầm'); header.toggleMenu();">Đầm</a></li>
+                <li><a onclick="productList.filterSubCategory('Giày'); header.toggleMenu();">Giày</a></li>
+                <li><a onclick="productList.filterSubCategory('Túi'); header.toggleMenu();">Túi xách</a></li>
+            </ul>
+        </li>
+        <li class="drawer-nav-item">
+            <a onclick="header.toggleSub('drawer-urban')">Thời trang công sở <i class="fa-solid fa-angle-down"></i></a>
+            <ul class="drawer-sub-list" id="drawer-urban">
+                <li><a onclick="productList.filterSubCategory('Đầm'); header.toggleMenu();">Đầm công sở</a></li>
+                <li><a onclick="productList.filterSubCategory('Áo khoác'); header.toggleMenu();">Áo khoác</a></li>
+                <li><a onclick="productList.filterSubCategory('Túi'); header.toggleMenu();">Túi xách công sở</a></li>
+            </ul>
+        </li>
+        <li class="drawer-nav-item">
+            <a onclick="header.toggleSub('drawer-sale')" style="color:var(--brand-red);">Sale up to 50% <i class="fa-solid fa-angle-down"></i></a>
+            <ul class="drawer-sub-list" id="drawer-sale">
+                <li><a onclick="productList.filterCategory('hot'); header.toggleMenu();">Sản phẩm bán chạy</a></li>
+                <li><a onclick="productList.filterCategory('sale'); header.toggleMenu();">Sale 50% online</a></li>
+                <li><a onclick="productList.filterCategory('sale'); header.toggleMenu();">Đồng giá từ 99K</a></li>
+            </ul>
+        </li>
+        <li class="drawer-nav-item"><a href="tracking.html">Tra cứu đơn hàng</a></li>
+        <li class="drawer-nav-item"><a onclick="Utils.showToast('Thẻ thành viên Luna Club'); header.toggleMenu();">Thẻ thành viên</a></li>
+        <li class="drawer-nav-item"><a onclick="Utils.showToast('Câu chuyện thương hiệu Luna'); header.toggleMenu();">Câu chuyện thương hiệu</a></li>
+        <li class="drawer-nav-item"><a onclick="Utils.showToast('Hệ thống cửa hàng Luna'); header.toggleMenu();">Hệ thống cửa hàng</a></li>
+        <li class="drawer-nav-item"><a onclick="Utils.showToast('Dịch vụ may đo đồng phục Luna'); header.toggleMenu();">May đo đồng phục</a></li>
+    </ul>
+</div>
+
+<!-- Trang nhân viên: 2 tab SNAP / STAFF (vẽ bởi js/staff-page.js) -->
+<main class="staffstart-page" id="staff-page"></main>
+
+<!-- Footer -->
+<footer>
+    <div class="footer-grid">
+        <div class="footer-col">
+            <h4>Luna Fashion</h4>
+            <p>Luna - Thương hiệu thời trang dành cho phong cách năng động và hiện đại.</p>
+            <p>Hotline mua hàng: <strong>0900 000 000</strong></p>
+            <p>Hotline CSKH: <strong>0900 000 001</strong></p>
+        </div>
+        <div class="footer-col">
+            <h4>Danh mục</h4>
+            <ul>
+                <li><a onclick="productList.filterCategory('all')">Thời trang</a></li>
+                <li><a onclick="productList.filterSubCategory('Đầm')">Đầm</a></li>
+                <li><a onclick="productList.filterSubCategory('Áo')">Áo & Áo khoác</a></li>
+                <li><a onclick="productList.filterCategory('new')">Bộ sưu tập mới</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Hỗ trợ khách hàng</h4>
+            <ul>
+                <li><a href="tracking.html">Tra cứu đơn hàng</a></li>
+                <li><a href="javascript:void(0)" onclick="Utils.showToast('Chính sách mua hàng & giao nhận Luna')">Hướng dẫn mua hàng</a></li>
+                <li><a href="javascript:void(0)" onclick="Utils.showToast('Chính sách đổi trả trong 7 ngày')">Chính sách đổi trả</a></li>
+                <li><a href="javascript:void(0)" onclick="Utils.showToast('Quyền lợi thành viên VIP')">Chính sách thành viên</a></li>
+                <li><a href="javascript:void(0)" onclick="Utils.showToast('Xem danh sách cửa hàng')">Hệ thống cửa hàng</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Đăng ký bản tin</h4>
+            <p>Đăng ký để nhận sớm nhất thông báo các chương trình ưu đãi và sự kiện thời trang Luna.</p>
+            <div style="display:flex; gap:6px; margin-top:10px;">
+                <input type="text" placeholder="Email của bạn..." style="padding:10px 12px; border:1px solid #333; background:#222; color:#fff; flex:1; font-size:0.82rem;">
+                <button style="padding:10px 16px; background:#fff; border:none; color:#111; font-weight:700; cursor:pointer;" onclick="Utils.showToast('Đăng ký nhận tin thành công!')">Gửi</button>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        &copy; 2026 Luna Fashion. Đồ án môn Lập trình cơ sở với JavaScript (Web1044).
+    </div>
+</footer>
+
+<!-- Khung tài khoản trượt từ bên phải: Đăng nhập / Tạo tài khoản -->
+<div class="account-overlay" id="account-overlay" onclick="accountModal.closeOnOverlay(event)"></div>
+<aside class="account-drawer" id="account-modal" aria-label="Tài khoản">
+    <button class="account-close" onclick="accountModal.close()" aria-label="Đóng"><i class="fa-solid fa-xmark"></i></button>
+
+    <!-- Đăng nhập -->
+    <div class="account-pane active" id="pane-login">
+        <h3 class="account-title">Đăng nhập</h3>
+        <p class="account-switch">Bạn chưa có tài khoản? <a href="javascript:void(0)" onclick="accountModal.switchTab('register')">Tạo tài khoản</a></p>
+        <form id="login-form" onsubmit="auth.login(event)">
+            <input type="text" name="identity" placeholder="Địa chỉ email hoặc số điện thoại của bạn" class="account-input" required>
+            <input type="password" name="password" placeholder="Mật khẩu" class="account-input" required>
+            <a href="javascript:void(0)" class="account-forgot" onclick="accountModal.forgot()">Quên mật khẩu?</a>
+            <button type="submit" class="account-submit">Đăng nhập</button>
+        </form>
+    </div>
+
+    <!-- Tạo tài khoản -->
+    <div class="account-pane" id="pane-register">
+        <h3 class="account-title">Tạo tài khoản</h3>
+        <p class="account-switch">Bạn đã có tài khoản? <a href="javascript:void(0)" onclick="accountModal.switchTab('login')">Đăng nhập</a></p>
+        <form id="register-form" onsubmit="auth.register(event)">
+            <input type="text" name="name" placeholder="Họ và tên" class="account-input" required>
+            <input type="email" name="email" placeholder="Email" class="account-input" required>
+            <input type="tel" name="phone" placeholder="Số điện thoại" class="account-input" required>
+            <input type="password" name="password" placeholder="Mật khẩu (tối thiểu 6 ký tự)" class="account-input" required>
+            <input type="password" name="confirm" placeholder="Nhập lại mật khẩu" class="account-input" required>
+            <button type="submit" class="account-submit">Tạo tài khoản</button>
+        </form>
+    </div>
+</aside>
+
+<div id="toast"></div>
+
+<script src="js/products.js"></script>
+<script src="js/mock-data.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/header.js"></script>
+<script src="js/wishlist.js"></script>
+<script src="js/product-list.js"></script>
+<script src="js/staff-data.js"></script>
+<script src="js/staff-widgets.js"></script>
+<script src="js/staff-page.js"></script>
+<script src="js/account-modal.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/orders.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>

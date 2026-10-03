@@ -23,6 +23,17 @@ class Utils {
         setTimeout(() => toast.classList.remove("show"), 2200);
     }
 
+    // Chống chèn HTML khi in dữ liệu người dùng nhập vào innerHTML
+    static escapeHTML(text) {
+        const div = document.createElement("div");
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    static formatDateTime(ts) {
+        return new Date(ts).toLocaleString("vi-VN", { hour: "2-digit", minute: "2-digit", day: "2-digit", month: "2-digit", year: "numeric" });
+    }
+
     static scrollToSection(id) {
         const el = Utils.$(id);
         if (el) el.scrollIntoView({ behavior: "smooth" });

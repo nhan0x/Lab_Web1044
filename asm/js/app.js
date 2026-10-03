@@ -11,16 +11,28 @@ class App {
     // Phím Esc đóng mọi cửa sổ đang mở
     bindShortcuts() {
         document.addEventListener("keydown", e => {
-            if (e.key === "Escape") { productModal.close(); accountModal.close(); }
+            if (e.key === "Escape") {
+                accountModal.close();
+            }
         });
     }
 
     // Hiển thị lần đầu
     renderFirstTime() {
-        productList.render(products);
-        Utils.setText("product-counter", `Hiển thị ${products.length} sản phẩm`);
-        cart.render();
-        wishlist.updateBadge();
+        if (Utils.$("pd-page")) productDetail.render();
+        else {
+            productList.render(products);
+            this.applyUrlFilter();
+        }
+        auth.refreshUI();
+    }
+
+    // Từ trang chi tiết quay về: index.html?cat=hot | ?sub=Áo | ?q=từ khóa
+    applyUrlFilter() {
+        const q = new URLSearchParams(location.search);
+        if (q.get("cat")) productList.filterCategory(q.get("cat"));
+        else if (q.get("sub")) productList.filterSubCategory(q.get("sub"));
+        else if (q.get("q")) productList.search(q.get("q"));
     }
 }
 
