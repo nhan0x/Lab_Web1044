@@ -1,7 +1,4 @@
-/* ===== TIỆN ÍCH DÙNG CHUNG =====
-   Việc: hàm nhỏ mà nhiều file khác cùng dùng (lấy phần tử, định dạng giá, thông báo, cuộn tới mục).
-   Gọi dạng Utils.tenHam(...), không cần new.
-   Nạp: phải nạp ĐẦU TIÊN (trước mọi file trừ products.js). */
+// Hàm tiện ích dùng chung: lấy phần tử, định dạng giá / ngày, thông báo toast, cuộn tới mục.
 
 class Utils {
     static $(id) { return document.getElementById(id); }
@@ -15,7 +12,6 @@ class Utils {
 
     static getOriginalPrice(p) { return p.category === "sale" ? Math.round(p.price * 1.25) : 0; }
 
-    // Thông báo nhỏ hiện ở dưới màn hình trong 2,2 giây
     static showToast(message) {
         const toast = Utils.$("toast");
         toast.textContent = message;
@@ -23,7 +19,6 @@ class Utils {
         setTimeout(() => toast.classList.remove("show"), 2200);
     }
 
-    // Chống chèn HTML khi in dữ liệu người dùng nhập vào innerHTML
     static escapeHTML(text) {
         const div = document.createElement("div");
         div.textContent = text;

@@ -1,7 +1,4 @@
-/* ===== TRANG CHI TIẾT SẢN PHẨM (product.html?id=...) — kiểu elise.vn =====
-   Việc: đọc id trên địa chỉ, vẽ thư viện ảnh, giá, SKU, kích cỡ, số lượng, thêm giỏ / yêu thích, hướng dẫn.
-   Dùng: products (products.js); Utils (utils.js); cart (cart.js); wishlist (wishlist.js).
-   Giao diện: id="pd-page" trong product.html. */
+// Trang chi tiết sản phẩm (product.html?id=...): ảnh, giá, size, số lượng, thêm giỏ / yêu thích.
 
 class ProductDetail {
     constructor(allProducts) {

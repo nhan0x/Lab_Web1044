@@ -9,7 +9,7 @@
         --dark: #111111;
         --text-color: #222222;
         --font-main: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
-        --header-h: 100px; --header-h-compact: 76px;
+        --header-h: 100px; --header-h-compact: 76px; --flash-h: 34px;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 button, input, textarea, select { font-family: inherit; }
@@ -24,10 +24,10 @@ ul { list-style: none; }
 img { max-width: 100%; display: block; }
 
 /* Header (kiểu elise.vn): chữ mảnh, biểu tượng nét mảnh, ô tìm kiếm ở giữa */
-html { scroll-padding-top: var(--header-h-compact); }
-body { padding-top: var(--header-h); }
+html { scroll-padding-top: calc(var(--header-h-compact) + var(--flash-h)); }
+body { padding-top: calc(var(--header-h) + var(--flash-h)); }
 .site-header {
-        position: fixed; top: 0; left: 0; right: 0; height: var(--header-h); z-index: 1000;
+        position: fixed; top: var(--flash-h); left: 0; right: 0; height: var(--header-h); z-index: 1000;
         background: var(--white); font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
         transition: height 0.15s ease-out, box-shadow 0.15s ease-out;
     }
@@ -345,7 +345,7 @@ body { padding-top: var(--header-h); }
 .pd-grid { display: grid; grid-template-columns: 1fr 1fr; align-items: start; gap: 60px; }
 .pd-gallery { display: flex; flex-direction: column; gap: 6px; }
 .pd-gallery img { width: 100%; height: auto; display: block; }
-.pd-info { position: sticky; top: calc(var(--header-h-compact, 60px) + 20px); padding-top: 4px; display: flex; flex-direction: column; }
+.pd-info { position: sticky; top: calc(var(--header-h-compact) + var(--flash-h) + 20px); padding-top: 4px; display: flex; flex-direction: column; }
 .pd-name { font-size: 1.6rem; font-weight: 500; text-transform: uppercase; line-height: 1.3; margin: 0 0 14px; padding-right: 36px; }
 .pd-price { font-size: 1.05rem; margin-bottom: 26px; }
 .pd-price .old-price { font-size: 0.9rem; color: #888; text-decoration: line-through; margin-left: 8px; }
@@ -1072,7 +1072,7 @@ footer {
 
 /* Footer luôn nằm dưới đáy: trang ít nội dung vẫn cao ít nhất bằng màn hình (không còn khoảng trắng dưới footer) */
 .cart-page, .checkout-page, .tracking-page, .account-page, .staffstart-page, .pd-page, .wishlist-page {
-        min-height: calc(100vh - var(--header-h));
+        min-height: calc(100vh - var(--header-h) - var(--flash-h));
     }
 /* Trang giỏ hàng: chừa chỗ cho thanh "Tổng đơn / Thanh toán" cố định ở đáy */
 .cart-page { padding-bottom: 150px; }
@@ -1147,14 +1147,23 @@ footer {
     .wl-bar-inner .wl-btn { width: 100%; }
 }
 
-/* ---------- FLASH SALE (đồng hồ đếm ngược) ---------- */
-.flash-sale { max-width: 1825px; margin: 30px auto; padding: 22px 30px; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; background: var(--dark); color: #fff; }
-.flash-sale-text h3 { font-size: 1.3rem; text-transform: uppercase; letter-spacing: 1px; }
-.flash-sale-text p { font-size: 0.85rem; color: #ccc; margin-top: 4px; }
-.flash-sale-clock { display: flex; gap: 10px; }
-.flash-sale-clock span { display: flex; flex-direction: column; align-items: center; min-width: 64px; padding: 8px 6px; background: var(--brand-red); }
-.flash-sale-clock b { font-size: 1.6rem; font-variant-numeric: tabular-nums; }
-.flash-sale-clock small { font-size: 0.7rem; text-transform: uppercase; }
-.flash-sale-btn { padding: 12px 22px; border: 1px solid #fff; background: transparent; color: #fff; font-weight: 700; cursor: pointer; }
-.flash-sale-btn:hover { background: #fff; color: var(--dark); }
-@media (max-width: 600px) { .flash-sale { margin: 20px 15px; padding: 18px; justify-content: center; text-align: center; } }
+
+/* Dải Flash Sale nằm trên header: một dòng chữ nhỏ + đồng hồ đếm ngược */
+.flash-bar {
+        position: fixed; top: 0; left: 0; right: 0; height: var(--flash-h); z-index: 1001;
+        display: flex; align-items: center; justify-content: center; gap: 14px;
+        background: #000; color: #fff; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap;
+    }
+.flash-bar > span + span::before, .flash-bar-link::before { content: "·"; margin-right: 14px; color: #777; }
+.flash-bar-label { color: #c9a465; font-weight: 700; }
+.flash-bar-text { color: #ddd; }
+.flash-bar-clock b { display: inline-block; min-width: 22px; margin: 0 1px; font-weight: 700; text-align: center; font-variant-numeric: tabular-nums; }
+.flash-bar-link { color: #fff; }
+.flash-bar-link:hover { color: #c9a465; }
+@media (max-width: 767px) {
+    :root { --flash-h: 30px; }
+    .flash-bar { gap: 10px; font-size: 11px; letter-spacing: 0.03em; }
+    .flash-bar > span + span::before, .flash-bar-link::before { margin-right: 10px; }
+    .flash-bar-text { display: none; }
+}

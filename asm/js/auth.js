@@ -1,10 +1,4 @@
-/* ===== ĐĂNG KÝ / ĐĂNG NHẬP =====
-   Việc: tạo tài khoản, đăng nhập, đăng xuất, và chặn các thao tác tạo dữ liệu (thêm giỏ hàng, yêu thích,
-         đặt đơn) khi chưa đăng nhập. Chưa đăng nhập thì chỉ được xem.
-   Lưu localStorage: "users" (danh sách tài khoản), "currentUser" (email người đang đăng nhập).
-   Dùng: Utils (utils.js); accountModal (account-modal.js); cart, wishlist, productList (chỉ gọi lúc người dùng bấm).
-   Giao diện: id="login-form", "register-form", "account-label" trong index.html.
-   Lưu ý: đây là bản demo không có server, mật khẩu lưu thẳng trong trình duyệt, không dùng cho hệ thống thật. */
+// Đăng ký, đăng nhập, đăng xuất, sửa thông tin tài khoản và chặn thao tác khi chưa đăng nhập.
 
 class Auth {
     constructor() {
@@ -17,7 +11,6 @@ class Auth {
         catch (e) { return []; }
     }
 
-    // Người đang đăng nhập (object) hoặc null
     current() {
         const email = localStorage.getItem(this.sessionKey);
         return email ? this.users().find(u => u.email === email) || null : null;
@@ -25,13 +18,11 @@ class Auth {
 
     isLoggedIn() { return this.current() !== null; }
 
-    // Hậu tố khóa localStorage riêng cho từng người dùng (giỏ hàng, yêu thích)
     userKey(base) {
         const u = this.current();
         return u ? base + ":" + u.email : null;
     }
 
-    // Gọi ở đầu mọi thao tác tạo dữ liệu. Chưa đăng nhập: báo và mở cửa sổ đăng nhập, trả về false.
     requireLogin(message = "Vui lòng đăng nhập để thực hiện thao tác này") {
         if (this.isLoggedIn()) return true;
         Utils.showToast(message);
@@ -89,15 +80,11 @@ class Auth {
         Utils.showToast(message);
     }
 
-    // Bấm nút "Tài Khoản" trên header: chưa đăng nhập thì mở form, đã đăng nhập thì sang trang tài khoản
-    // (rê chuột vào nút này khi đã đăng nhập sẽ hiện khung "Tài Khoản / Đăng Xuất" — xem CSS .header-account)
     onAccountClick() {
         if (!this.current()) { accountModal.open("login"); return; }
         location.href = "account.html";
     }
 
-    // Sửa thông tin người đang đăng nhập. changes: { name, phone, email, password, addresses, newsletter }
-    // Đổi email thì chuyển luôn giỏ hàng, yêu thích và đơn hàng sang email mới.
     updateUser(changes) {
         const u = this.current();
         if (!u) return false;
@@ -121,7 +108,6 @@ class Auth {
         return true;
     }
 
-    // Vẽ lại mọi thứ phụ thuộc vào người dùng: nhãn header, giỏ hàng, yêu thích, nút tim trên thẻ sản phẩm
     refreshUI() {
         const u = this.current();
         Utils.setText("account-label", u ? u.name.split(" ").pop() : "Tài Khoản");
@@ -130,14 +116,12 @@ class Auth {
         cart.render();
         wishlist.updateBadge();
         productList.render(productList.current);
-        // Các trang khác (thanh toán, tra cứu đơn) tự vẽ lại khi đăng nhập / đăng xuất
         window.dispatchEvent(new Event("authchange"));
     }
 }
 
 const auth = new Auth();
 
-// Đăng nhập / đăng xuất ở tab khác thì tab này cũng cập nhật theo
 window.addEventListener("storage", e => {
     if (e.key === auth.sessionKey) auth.refreshUI();
 });

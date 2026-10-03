@@ -1,9 +1,4 @@
-/* ===== KHUNG TÀI KHOẢN (trượt từ bên phải, kiểu elise.vn) =====
-   Việc: mở-đóng khung đăng nhập / đăng ký (nút "Tài Khoản" trên header) và chuyển qua lại giữa 2 màn.
-   Dùng: Utils (utils.js). Giao diện: id="account-modal", "account-overlay",
-         "pane-login", "pane-register" trong index.html / product.html / staff.html.
-   Kiểm tra dữ liệu của các form trong khung này sẽ viết ở form.js
-   (id form: "login-form", "register-form"). */
+// Khung đăng nhập / tạo tài khoản trượt từ bên phải: mở, đóng và chuyển giữa 2 màn.
 
 class AccountModal {
     open(tab = "login") {
@@ -23,7 +18,6 @@ class AccountModal {
 
     closeOnOverlay(e) { if (e.target.id === "account-overlay") this.close(); }
 
-    // tab = "login" | "register"
     switchTab(tab) {
         ["login", "register"].forEach(name =>
             Utils.$("pane-" + name).classList.toggle("active", name === tab));

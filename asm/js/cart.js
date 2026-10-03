@@ -1,9 +1,4 @@
-/* ===== GIỎ HÀNG (kiểu elise.vn) =====
-   Việc: thêm / gỡ / đổi số lượng, lưu localStorage theo tài khoản, cập nhật số trên biểu tượng túi.
-         Trang giỏ hàng riêng (cart.html): "Thông tin giỏ hàng", sửa số lượng rồi bấm "Cập nhật giỏ hàng".
-   Mỗi dòng trong giỏ: { id, size, qty } — cùng sản phẩm khác size là 2 dòng.
-   Dùng: products (products.js); Utils (utils.js); auth (auth.js); orders (orders.js, tính phí ship).
-   Giao diện: id="cart-count" trên header; id="cart-page" trong cart.html. */
+// Giỏ hàng: thêm / gỡ / đổi số lượng theo size, lưu theo tài khoản và vẽ trang cart.html.
 
 class Cart {
     constructor(allProducts) {
@@ -11,14 +6,13 @@ class Cart {
         this.defaultSize = "M";
     }
 
-    // Mỗi tài khoản có giỏ riêng; chưa đăng nhập thì không có khóa (giỏ trống, không ghi được)
     key() { return auth.userKey("cart"); }
 
     get() {
         if (!this.key()) return [];
         try {
             const items = JSON.parse(localStorage.getItem(this.key())) || [];
-            return items.map(i => ({ ...i, size: i.size || this.defaultSize })); // giỏ cũ chưa có size
+            return items.map(i => ({ ...i, size: i.size || this.defaultSize }));
         } catch (e) { return []; }
     }
 
@@ -30,7 +24,6 @@ class Cart {
 
     same(a, id, size) { return a.id === id && a.size === size; }
 
-    // Trả về true nếu đã thêm được (false khi chưa đăng nhập)
     add(id, qty = 1, size = this.defaultSize) {
         if (!auth.requireLogin("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng")) return false;
         const items = this.get();
@@ -42,14 +35,12 @@ class Cart {
         return true;
     }
 
-    // Nút "Gỡ"
     remove(id, size) {
         if (!auth.requireLogin()) return;
         this.save(this.get().filter(x => !this.same(x, id, size)));
         Utils.showToast("Đã gỡ sản phẩm khỏi giỏ hàng");
     }
 
-    // Nút − / + trên trang giỏ: chỉ đổi số trong ô, bấm "Cập nhật giỏ hàng" mới lưu (giống elise.vn)
     stepQty(btn, delta) {
         const input = btn.parentNode.querySelector("input");
         input.value = Math.max(1, (parseInt(input.value, 10) || 1) + delta);
@@ -58,7 +49,6 @@ class Cart {
 
     markDirty() { Utils.$("cart-update-btn").classList.add("dirty"); }
 
-    // Lưu số lượng đang nhập trong các ô; trả về true nếu có thay đổi
     applyInputs(silent) {
         const items = this.get();
         let changed = false;
@@ -72,7 +62,6 @@ class Cart {
         return changed;
     }
 
-    // Các dòng trong giỏ kèm thông tin sản phẩm (dùng cho trang giỏ & thanh toán)
     lines() {
         return this.get()
             .map(i => ({ product: this.products.find(p => p.id === i.id), size: i.size, qty: i.qty }))
@@ -89,10 +78,8 @@ class Cart {
         this.render();
     }
 
-    // Biểu tượng túi trên header: sang trang giỏ hàng
     open() { location.href = "cart.html"; }
 
-    // Số trên biểu tượng túi + (nếu đang ở cart.html) vẽ lại trang giỏ
     render() {
         Utils.setText("cart-count", this.count());
         if (Utils.$("cart-page")) this.renderPage();
@@ -154,8 +141,6 @@ class Cart {
             </div>`;
     }
 
-    // Mục "Đơn hàng của bạn" dưới giỏ hàng: 5 đơn gần nhất + link tra cứu.
-    // Chưa đăng nhập thì chỉ có link tra cứu bằng mã đơn.
     ordersHTML() {
         const list = auth.isLoggedIn() ? orders.all() : [];
         const recent = list.slice(0, 5);
@@ -186,7 +171,6 @@ class Cart {
             </section>`;
     }
 
-    // Nút "Thanh toán": lưu số lượng đang sửa (nếu có) rồi sang trang thanh toán
     checkout() {
         if (!auth.requireLogin("Vui lòng đăng nhập để đặt hàng")) return;
         if (Utils.$("cart-page")) this.applyInputs(true);

@@ -1,13 +1,10 @@
-/* ===== DANH SÁCH SẢN PHẨM: HIỂN THỊ, LỌC, TÌM KIẾM =====
-   Việc: vẽ lưới sản phẩm, lọc theo nhóm (tab) / theo loại (menu), tìm kiếm theo tên.
-   Dùng: products (products.js); Utils (utils.js); wishlist (wishlist.js).
-         Thẻ mở trang product.html?id=...; các nút gọi cart.add, wishlist.toggle. */
+// Lưới sản phẩm New Arrival trên trang chủ: hiển thị, lọc theo nhóm / loại và tìm kiếm.
 
 class ProductList {
     constructor(allProducts) {
         this.all = allProducts;
-        this.current = allProducts; // danh sách đang hiển thị (để vẽ lại đúng bộ lọc khi bấm tim)
-        this.pageSize = 8;          // NEW ARRIVAL: hiện 8 sản phẩm đầu, bấm "Xem thêm" để hiện hết
+        this.current = allProducts;
+        this.pageSize = 8;
         this.expanded = false;
     }
 
@@ -51,7 +48,7 @@ class ProductList {
     render(list) {
         this.current = list;
         const grid = Utils.$("main-product-grid");
-        if (!grid) return; // đang ở trang chi tiết (không có lưới)
+        if (!grid) return;
         const shown = this.expanded ? list : list.slice(0, this.pageSize);
         grid.innerHTML = list.length
             ? shown.map(p => this.cardHTML(p)).join("")
@@ -60,13 +57,11 @@ class ProductList {
         if (more) more.style.display = list.length > shown.length ? "" : "none";
     }
 
-    // Nút "Xem thêm" dưới NEW ARRIVAL
     showAll() {
         this.expanded = true;
         this.render(this.current);
     }
 
-    // Link "Xem tất cả" trên dòng thông báo lọc: bỏ lọc, quay về 8 sản phẩm đầu
     reset() {
         this.expanded = false;
         document.querySelectorAll(".filter-tab-btn").forEach(b => b.classList.remove("active"));
@@ -74,25 +69,21 @@ class ProductList {
         this.render(this.all);
     }
 
-    // Hiển thị danh sách + cập nhật bộ đếm + cuộn tới khu vực sản phẩm
     show(list, counterText, query) {
-        // Ở trang chi tiết: quay về trang chủ rồi lọc (app.js đọc tham số trên địa chỉ)
         if (!Utils.$("main-product-grid")) { location.href = "index.html?" + query; return; }
-        this.expanded = true; // kết quả lọc / tìm kiếm thì hiện hết
+        this.expanded = true;
         this.render(list);
         Utils.setText("product-counter", counterText);
         Utils.$("product-filter-note").classList.add("show");
         Utils.scrollToSection("product-section");
     }
 
-    // Lọc theo nhóm: "all" | "new" | "hot" | "sale" (các tab phía trên lưới)
     filterCategory(cat, btn) {
         document.querySelectorAll(".filter-tab-btn").forEach(b => b.classList.toggle("active", b === btn));
         const list = cat === "all" ? this.all : this.all.filter(p => p.category === cat);
         this.show(list, `Hiển thị ${list.length} sản phẩm`, "cat=" + cat);
     }
 
-    // Lọc theo loại (Áo, Đầm, Giày, Túi...) từ menu; không có kết quả thì hiện tất cả
     filterSubCategory(keyword) {
         const kw = keyword.toLowerCase();
         const found = this.all.filter(p => p.name.toLowerCase().includes(kw));
@@ -100,7 +91,6 @@ class ProductList {
         this.show(list, `Hiển thị ${list.length} sản phẩm (${keyword})`, "sub=" + encodeURIComponent(keyword));
     }
 
-    // Tìm theo tên khi gõ vào ô tìm kiếm ở header
     search(keyword) {
         const kw = keyword.trim().toLowerCase();
         const list = kw ? this.all.filter(p => p.name.toLowerCase().includes(kw)) : this.all;

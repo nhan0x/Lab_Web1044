@@ -1,7 +1,5 @@
-// Dữ liệu giả (mock) cho thanh toán & theo dõi đơn hàng. Không có server thật.
-// Nạp: sau products.js, trước orders.js.
+// Dữ liệu giả: các bước vận chuyển, phí giao hàng, phương thức thanh toán, tỉnh/thành và đơn hàng mẫu.
 
-// Chuỗi trạng thái của một kiện hàng, theo thứ tự. Đơn mới tạo ở bước 0, mỗi bước kế tiếp mở ra dần.
 const TRACKING_STEPS = [
     { icon: "fa-receipt",       title: "Đã đặt hàng",            desc: "Luna đã tiếp nhận đơn hàng của bạn.",                    place: "Hệ thống Luna" },
     { icon: "fa-circle-check",  title: "Đã xác nhận",            desc: "Đơn hàng được xác nhận và thanh toán thành công.",       place: "Hệ thống Luna" },
@@ -12,23 +10,19 @@ const TRACKING_STEPS = [
     { icon: "fa-house-circle-check", title: "Giao thành công",   desc: "Kiện hàng đã được giao. Cảm ơn bạn đã mua sắm tại Luna!", place: "Địa chỉ nhận hàng" }
 ];
 
-// Giống elise.vn: một đơn vị giao hàng, phí đồng giá 30.000đ toàn quốc
 const SHIPPING = {
     carrier: "Giao Hàng Tiết Kiệm",
-    fee: 30000,            // phí giao hàng (đồng giá)
-    etaDays: 3,            // dự kiến giao sau 3 ngày
+    fee: 30000,
+    etaDays: 3,
     hotline: "0900 000 000"
 };
 
-// Chỉ nhận thanh toán khi nhận hàng (không có chuyển khoản / thẻ)
 const PAYMENT_METHODS = {
     cod: "Thanh toán khi nhận hàng (COD)"
 };
 
-// Danh sách tỉnh/thành trong form địa chỉ (giống ô chọn trên elise.vn)
 const PROVINCES = ["Thành phố Hà Nội","Thành phố Hồ Chí Minh","Tỉnh An Giang","Tỉnh Bà Rịa - Vũng Tàu","Tỉnh Bắc Giang","Tỉnh Bắc Kạn","Tỉnh Bạc Liêu","Tỉnh Bắc Ninh","Tỉnh Bến Tre","Tỉnh Bình Định","Tỉnh Bình Dương","Tỉnh Bình Phước","Tỉnh Bình Thuận","Tỉnh Cà Mau","Thành phố Cần Thơ","Tỉnh Cao Bằng","Thành phố Đà Nẵng","Tỉnh Đắk Lắk","Tỉnh Đắk Nông","Tỉnh Điện Biên","Tỉnh Đồng Nai","Tỉnh Đồng Tháp","Tỉnh Gia Lai","Tỉnh Hà Giang","Tỉnh Hà Nam","Tỉnh Hà Tĩnh","Tỉnh Hải Dương","Thành phố Hải Phòng","Tỉnh Hậu Giang","Tỉnh Hoà Bình","Tỉnh Hưng Yên","Tỉnh Khánh Hòa","Tỉnh Kiên Giang","Tỉnh Kon Tum","Tỉnh Lai Châu","Tỉnh Lâm Đồng","Tỉnh Lạng Sơn","Tỉnh Lào Cai","Tỉnh Long An","Tỉnh Nam Định","Tỉnh Nghệ An","Tỉnh Ninh Bình","Tỉnh Ninh Thuận","Tỉnh Phú Thọ","Tỉnh Phú Yên","Tỉnh Quảng Bình","Tỉnh Quảng Nam","Tỉnh Quảng Ngãi","Tỉnh Quảng Ninh","Tỉnh Quảng Trị","Tỉnh Sóc Trăng","Tỉnh Sơn La","Tỉnh Tây Ninh","Tỉnh Thái Bình","Tỉnh Thái Nguyên","Tỉnh Thanh Hóa","Tỉnh Thừa Thiên Huế","Tỉnh Tiền Giang","Tỉnh Trà Vinh","Tỉnh Tuyên Quang","Tỉnh Vĩnh Long","Tỉnh Vĩnh Phúc","Tỉnh Yên Bái"];
 
-// Đơn mẫu để thử tra cứu (nhập mã vào ô "Tra cứu đơn hàng")
 const MOCK_ORDERS = (function () {
     const H = 3600 * 1000;
     const now = Date.now();

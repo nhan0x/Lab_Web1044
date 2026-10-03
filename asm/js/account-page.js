@@ -1,8 +1,4 @@
-/* ===== TRANG TÀI KHOẢN (account.html) — kiểu elise.vn/customer/account =====
-   Menu trái: Tài khoản | Đơn hàng và đổi trả | Sổ địa chỉ | Thông tin cá nhân | Thông tin truy cập | Bản tin.
-   Địa chỉ: account.html#orders, #address, #info, #access, #newsletter (không có # là trang tổng quan).
-   Dùng: Utils; auth (updateUser); orders; PROVINCES, TRACKING_STEPS (mock-data.js).
-   Giao diện: id="account-page" trong account.html. */
+// Trang tài khoản (account.html): tổng quan, đơn hàng và đổi trả, sổ địa chỉ, thông tin cá nhân, thông tin truy cập, bản tin.
 
 const ACCOUNT_SECTIONS = [
     { id: "",           label: "Tài khoản" },
@@ -22,7 +18,7 @@ class AccountPage {
     constructor(root) {
         this.root = root;
         this.menuOpen = false;
-        this.editing = null;   // id địa chỉ đang sửa, "new" = thêm mới
+        this.editing = null;
         window.addEventListener("hashchange", () => { this.editing = null; this.render(); });
         window.addEventListener("authchange", () => this.render());
     }
@@ -65,7 +61,6 @@ class AccountPage {
 
     toggleMenu() { this.menuOpen = !this.menuOpen; this.render(); }
 
-    // ---------- Tổng quan ----------
     dashboard() {
         return `
             <h1 class="ac-title">Tài khoản</h1>
@@ -77,7 +72,6 @@ class AccountPage {
             <button class="cart-btn cart-btn-dark ac-logout" onclick="auth.logout()">Đăng xuất</button>`;
     }
 
-    // ---------- Đơn hàng và đổi trả ----------
     ordersView() {
         const list = orders.all();
         const status = o => orders.statusLabel(o);
@@ -111,7 +105,6 @@ class AccountPage {
         this.render();
     }
 
-    // ---------- Sổ địa chỉ ----------
     addresses(u) { return u.addresses || []; }
 
     addressView(u) {
@@ -208,7 +201,6 @@ class AccountPage {
         Utils.showToast("Đã xóa địa chỉ");
     }
 
-    // ---------- Thông tin cá nhân ----------
     infoView(u) {
         return `
             <h1 class="ac-title">Thông tin cá nhân</h1>
@@ -249,7 +241,6 @@ class AccountPage {
         Utils.showToast("Đã lưu thông tin cá nhân");
     }
 
-    // ---------- Thông tin truy cập (email + mật khẩu) ----------
     accessView(u) {
         return `
             <h1 class="ac-title">Thông tin truy cập</h1>
@@ -301,7 +292,6 @@ class AccountPage {
         Utils.showToast("Đã cập nhật thông tin truy cập");
     }
 
-    // ---------- Bản tin ----------
     newsletterView(u) {
         return `
             <h1 class="ac-title">Bản tin</h1>
@@ -319,7 +309,6 @@ class AccountPage {
         Utils.showToast(on ? "Đã đăng ký nhận bản tin" : "Đã hủy đăng ký bản tin");
     }
 
-    // Hiện / xóa lỗi dưới ô nhập; trả về true nếu hợp lệ
     check(input, message) {
         const field = input.closest(".co-field");
         field.classList.toggle("invalid", !!message);

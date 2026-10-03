@@ -1,7 +1,5 @@
-// Dữ liệu sản phẩm (ảnh người mẫu lấy từ elise.vn, lưu trong image/elise/).
-// image = ảnh chính, image2 = ảnh hiện khi rê chuột, gallery = các ảnh ở trang chi tiết.
-// Thêm sản phẩm mới: sao chép một object bên dưới rồi đổi id (không trùng) và nội dung.
-// category chỉ nhận: "new" (hàng mới) | "hot" (bán chạy) | "sale" (khuyến mãi)
+// Dữ liệu sản phẩm (tên, giá, SKU, nhóm, ảnh).
+
 const products = [
     { id: 1, name: "ĐẦM THUN ĐEN NHÚN EO", price: 1998000, sku: "FS2605183DMKCBK", category: "new",
       image: "image/elise/1-card0.jpg", image2: "image/elise/1-card1.jpg",

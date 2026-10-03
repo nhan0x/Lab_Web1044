@@ -1,12 +1,5 @@
-/* ===== TRA CỨU ĐƠN HÀNG (tracking.html) — kiểu elise.vn/sales/guest/form =====
-   Việc: form "Thông tin đặt hàng" (mã đơn + tên người nhận + email hoặc SĐT) → trang chi tiết đơn.
-         Đã đăng nhập thì có thêm bảng "Đơn hàng của bạn" để xem nhanh.
-   Trạng thái hiển thị theo dữ liệu đã lưu, KHÔNG tự cập nhật theo thời gian thực.
-   Dùng: Utils; auth; orders; TRACKING_STEPS, SHIPPING, PAYMENT_METHODS (mock-data.js).
-   Địa chỉ: tracking.html | tracking.html?code=LN100002&name=...&email=... (từ trang đặt hàng thành công)
-   Giao diện: id="tracking-page" trong tracking.html. */
+// Trang tra cứu đơn hàng (tracking.html): form tra cứu và chi tiết đơn.
 
-// 4 giai đoạn hiển thị cho khách; "from" là bước đầu tiên (trong TRACKING_STEPS) thuộc giai đoạn đó
 const TRACK_STAGES = [
     { label: "Đã đặt hàng", icon: "fa-receipt",    from: 0 },
     { label: "Chuẩn bị",    icon: "fa-box-open",   from: 2 },
@@ -19,8 +12,7 @@ class TrackingPage {
         this.root = root;
         this.by = "email";
         this.form = { code: "", name: "", value: "" };
-        this.mode = "form";       // "form" | "order"
-        // Đăng nhập / đăng xuất: vẽ lại form (để hiện / ẩn bảng "Đơn hàng của bạn"), không đụng tới đơn đang xem
+        this.mode = "form";
         window.addEventListener("authchange", () => { if (this.mode === "form") this.renderForm(); });
 
         const q = new URLSearchParams(location.search);
@@ -31,7 +23,6 @@ class TrackingPage {
             const order = orders.lookup(code, this.form.name, this.by, this.form.value);
             if (order) { this.renderOrder(order); return; }
         } else if (code && orders.find(code)) {
-            // Đơn của chính tài khoản đang đăng nhập (hoặc đơn mẫu): xem thẳng
             this.renderOrder(orders.find(code));
             return;
         }
@@ -44,7 +35,6 @@ class TrackingPage {
         return { step, label: TRACKING_STEPS[step].title, done: step >= TRACKING_STEPS.length - 1 };
     }
 
-    // ---------- Form tra cứu ----------
     renderForm(error) {
         this.mode = "form";
         const f = this.form;
@@ -134,7 +124,6 @@ class TrackingPage {
         if (order) this.renderOrder(order);
     }
 
-    // ---------- Chi tiết đơn ----------
     stagesHTML(step) {
         let now = 0;
         TRACK_STAGES.forEach((s, i) => { if (step >= s.from) now = i; });

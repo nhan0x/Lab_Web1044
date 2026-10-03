@@ -1,6 +1,5 @@
-// Dữ liệu nhân viên & ảnh Snap lấy từ elise.vn (trang chủ và trang /staffstart/staff), ảnh lưu trong image/staff/.
-// staff: thứ tự mảng = "nhân viên mới nhất"; viewOrder = thứ hạng khi sắp xếp "lượt xem nhiều nhất".
-// avatar rỗng = nhân viên chưa có ảnh (hiện vòng tròn xám).
+// Dữ liệu nhân viên, ảnh Snap và thứ tự xếp hạng nhân viên.
+
 const STAFF = [
     {"id":131201,"name":"Nguyễn Thị Hằng Nhi","height":170,"location":"Luna Biên Hòa 3","avatar":"image/staff/avatar-131201.jpg","viewOrder":2},
     {"id":131183,"name":"Huỳnh Thị Thu Nhung","height":165,"location":"Luna Thanh Hoá 1","avatar":"image/staff/avatar-131183.jpg","viewOrder":1},
@@ -23,7 +22,6 @@ const STAFF = [
     {"id":131218,"name":"Bùi Thanh Hoa","height":155,"location":"Luna Việt Trì","avatar":"image/staff/avatar-131218.jpg","viewOrder":19}
 ];
 
-// Snap: mỗi ảnh gắn với 1 nhân viên (staffId). Hai tab trên trang chủ: Mới nhất / Phổ biến.
 const SNAPS_LATEST = [
     {"id":68556693,"staffId":131201,"image":"image/staff/snap-68556693.jpg"},
     {"id":68552894,"staffId":131201,"image":"image/staff/snap-68552894.jpg"},
@@ -59,5 +57,4 @@ const SNAPS_POPULAR = [
     {"id":62917043,"staffId":131183,"image":"image/staff/snap-62917043.jpg"}
 ];
 
-// Xếp hạng nhân viên (thứ tự 1 → 15) theo id nhân viên
 const STAFF_RANKING = [131183,131201,131222,131224,131221,131212,131219,131217,131197,131199,131211,131210,132028,131209,131220];

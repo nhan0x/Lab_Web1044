@@ -1,12 +1,7 @@
-/* ===== TRANG CHỦ: SNAP & XẾP HẠNG NHÂN VIÊN (kiểu elise.vn) =====
-   Việc: vẽ khối "Snap" (2 tab Mới nhất / Phổ biến, băng chuyền 2 hàng, nút mũi tên)
-         và khối "Xếp hạng nhân viên" (băng chuyền tự chạy, thanh tiến trình bên dưới).
-   Dùng: STAFF, SNAPS_LATEST, SNAPS_POPULAR, STAFF_RANKING (staff-data.js).
-   Giao diện: id="snap-widget", id="staff-ranking" trong index.html. */
+// Trang chủ: khối Snap (2 tab, băng chuyền) và khối Xếp hạng nhân viên.
 
 const staffById = id => STAFF.find(s => s.id === id);
 
-// Ảnh đại diện tròn; nhân viên chưa có ảnh thì hiện vòng tròn xám
 function staffAvatarHTML(s, cls) {
     return s && s.avatar
         ? `<img src="${s.avatar}" alt="${s.name}" class="${cls}" loading="lazy">`
@@ -83,7 +78,6 @@ class SnapWidget {
         this.move(0);
     }
 
-    // index = số cột đã trượt qua (mỗi cột gồm 2 ảnh xếp chồng)
     move(index) {
         const visible = this.visible();
         const columns = Math.ceil(this.list().length / 2);
@@ -112,7 +106,7 @@ class StaffRanking {
     constructor(root) {
         this.root = root;
         this.index = 0;
-        this.interval = 3000; // tự trượt sau mỗi 3 giây
+        this.interval = 3000;
         this.render();
         window.addEventListener("resize", () => this.layout());
     }

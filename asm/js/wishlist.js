@@ -1,11 +1,6 @@
-/* ===== YÊU THÍCH (WISHLIST) — trang wishlist.html kiểu elise.vn/wishlist =====
-   Việc: lưu danh sách id sản phẩm yêu thích vào localStorage theo tài khoản, cập nhật số trên header,
-         vẽ trang "Sản phẩm yêu thích" (chọn size → thêm vào giỏ, xóa khỏi danh sách).
-   Dùng: Utils (utils.js); auth; cart; productList (product-list.js, chỉ dùng lúc người dùng bấm).
-   Giao diện: id="wishlist-count" trên header; id="wishlist-page" trong wishlist.html. */
+// Sản phẩm yêu thích: lưu theo tài khoản, cập nhật số trên header và vẽ trang wishlist.html.
 
 class Wishlist {
-    // Mỗi tài khoản có danh sách riêng; chưa đăng nhập thì trống
     key() { return auth.userKey("wishlist"); }
 
     get() {
@@ -22,13 +17,11 @@ class Wishlist {
 
     has(id) { return this.get().includes(id); }
 
-    // Số trên biểu tượng tim + (nếu đang ở wishlist.html) vẽ lại trang
     updateBadge() {
         Utils.setText("wishlist-count", this.get().length);
         if (Utils.$("wishlist-page")) this.renderPage();
     }
 
-    // Bấm nút tim trên thẻ sản phẩm: thêm hoặc bỏ yêu thích rồi vẽ lại danh sách đang xem
     toggle(id, event) {
         event.stopPropagation();
         if (!auth.requireLogin("Vui lòng đăng nhập để lưu sản phẩm yêu thích")) return;
@@ -50,7 +43,6 @@ class Wishlist {
         Utils.showToast("Đã xóa khỏi danh sách yêu thích");
     }
 
-    // "Thêm vào giỏ" trên trang yêu thích: thêm với size đang chọn rồi bỏ khỏi danh sách yêu thích
     moveToCart(id, btn) {
         const size = btn.closest(".wl-item").querySelector(".wl-size").value;
         if (!cart.add(id, 1, size)) return;

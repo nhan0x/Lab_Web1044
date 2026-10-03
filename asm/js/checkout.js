@@ -1,8 +1,4 @@
-/* ===== TRANG THANH TOÁN 4 BƯỚC (checkout.html) — kiểu elise.vn =====
-   01. Chi tiết → 02. Vận chuyển → 03. Thanh toán → 04. Hoàn thành; bên phải luôn có khung "Giỏ hàng".
-   Chỉ nhận thanh toán khi nhận hàng (COD). Phải đăng nhập mới đặt được (giỏ hàng gắn với tài khoản).
-   Dùng: Utils; auth; cart; orders; SHIPPING, PAYMENT_METHODS, PROVINCES (mock-data.js).
-   Giao diện: id="checkout-page" trong checkout.html. */
+// Trang thanh toán 4 bước (checkout.html): chi tiết, vận chuyển, thanh toán khi nhận hàng, hoàn thành.
 
 const CHECKOUT_STEPS = ["Chi tiết", "Vận chuyển", "Thanh toán", "Hoàn thành"];
 
@@ -10,9 +6,9 @@ class CheckoutPage {
     constructor(root) {
         this.root = root;
         this.step = 1;
-        this.contact = null;   // { email } — bước 1
-        this.ship = null;      // địa chỉ — bước 2
-        this.order = null;     // đơn vừa đặt — bước 4
+        this.contact = null;
+        this.ship = null;
+        this.order = null;
         window.addEventListener("authchange", () => { if (this.step < 4) this.render(); });
         this.render();
     }
@@ -33,7 +29,6 @@ class CheckoutPage {
                 </div>`;
             return;
         }
-        // Chưa đăng nhập thì luôn ở bước 1
         if (!auth.isLoggedIn() && this.step < 4) this.step = 1;
 
         const main = [null, this.stepDetail, this.stepShipping, this.stepPayment, this.stepDone][this.step].call(this);
@@ -46,7 +41,6 @@ class CheckoutPage {
             </div>`;
     }
 
-    // Thanh bước: bước đã qua bấm được để quay lại (trừ khi đã hoàn thành)
     navHTML() {
         return `<ol class="co-steps">` + CHECKOUT_STEPS.map((label, i) => {
             const n = i + 1;
@@ -59,7 +53,6 @@ class CheckoutPage {
         }).join("") + `</ol>`;
     }
 
-    // ---------- Khung "Giỏ hàng" bên phải ----------
     summaryHTML() {
         const items = this.step === 4 && this.order
             ? this.order.items.map(i => ({ id: i.id, name: i.name, image: i.image, price: i.price, qty: i.qty, size: i.size }))
@@ -107,7 +100,6 @@ class CheckoutPage {
         Utils.showToast(code ? "Mã giảm giá không hợp lệ hoặc đã hết hạn" : "Vui lòng nhập mã giảm giá");
     }
 
-    // ---------- 01. Chi tiết ----------
     stepDetail() {
         const u = auth.current();
         if (!u) {
@@ -144,10 +136,8 @@ class CheckoutPage {
         this.go(2);
     }
 
-    // ---------- 02. Vận chuyển ----------
     stepShipping() {
         const u = auth.current();
-        // Điền sẵn từ địa chỉ mặc định trong Sổ địa chỉ (trang tài khoản), không có thì lấy tên + SĐT tài khoản
         const saved = (u.addresses || []).find(a => a.isDefault) || {};
         const parts = (saved.name || u.name).trim().split(/\s+/);
         const s = this.ship || {
@@ -214,7 +204,6 @@ class CheckoutPage {
         this.go(3);
     }
 
-    // Hiện / xóa lỗi dưới ô nhập; trả về true nếu hợp lệ
     check(input, message) {
         const field = input.closest(".co-field");
         field.classList.toggle("invalid", !!message);
@@ -222,7 +211,6 @@ class CheckoutPage {
         return !message;
     }
 
-    // ---------- 03. Thanh toán ----------
     stepPayment() {
         const s = this.ship;
         const fullAddress = [s.address, s.ward, s.district, s.province].filter(Boolean).join(", ");
@@ -265,7 +253,6 @@ class CheckoutPage {
             name: `${s.lastName} ${s.firstName}`.trim(), email: this.contact.email, phone: "0" + s.phone,
             province: s.province, district: s.district, ward: s.ward, address: s.address, note: s.note
         };
-        // Giả lập hệ thống xử lý đơn ~1 giây
         const btn = Utils.$("co-place-btn");
         btn.disabled = true;
         btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang đặt hàng...';
@@ -276,7 +263,6 @@ class CheckoutPage {
         }, 1000);
     }
 
-    // ---------- 04. Hoàn thành ----------
     stepDone() {
         const o = this.order;
         if (!o) { location.href = "cart.html"; return ""; }

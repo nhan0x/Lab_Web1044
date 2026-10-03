@@ -1,8 +1,4 @@
-/* ===== TRANG NHÂN VIÊN (staff.html) — kiểu elise.vn/staffstart =====
-   Việc: 2 tab SNAP / STAFF; sắp xếp (mới nhất / lượt xem nhiều nhất); lọc theo chiều cao.
-   Địa chỉ: staff.html (tab Staff) hoặc staff.html?tab=snap.
-   Dùng: STAFF, SNAPS_LATEST, SNAPS_POPULAR (staff-data.js); staffById, staffAvatarHTML (staff-widgets.js).
-   Giao diện: id="staff-page" trong staff.html. */
+// Trang nhân viên (staff.html): 2 tab Snap / Staff, sắp xếp và lọc theo chiều cao.
 
 class StaffPage {
     constructor(root) {
@@ -54,14 +50,12 @@ class StaffPage {
         this.tab = tab;
         this.sort = "time";
         this.root.querySelectorAll(".staffstart-tab").forEach(li => li.classList.toggle("active", li.dataset.tab === tab));
-        // Ghi tab lên địa chỉ để tải lại trang vẫn đúng tab (không đổi tên file)
         try { history.replaceState(null, "", tab === "snap" ? "?tab=snap" : location.pathname); } catch (e) {}
         document.title = (tab === "snap" ? "Snap" : "Nhân viên") + " | Luna";
 
         Utils.$("staff-sorter").innerHTML = tab === "snap"
             ? '<option value="time">Sắp xếp theo snap mới nhất</option><option value="pv">Sắp xếp theo snap phổ biến</option>'
             : '<option value="time">Sắp xếp theo nhân viên mới nhất</option><option value="pv">Sắp xếp theo lượt xem nhiều nhất</option>';
-        // Bộ lọc chiều cao chỉ dùng cho tab Staff
         Utils.$("staff-filter-toggle").style.display = tab === "staff" ? "" : "none";
         if (tab !== "staff") this.toggleFilter(false);
         this.renderGrid();
@@ -73,7 +67,6 @@ class StaffPage {
         Utils.$("staff-filter-toggle").innerHTML = `Lọc <i class="fa-solid fa-${this.filterOpen ? "minus" : "plus"}"></i>`;
     }
 
-    // Hai con trượt không được vượt qua nhau
     onRange(changedId) {
         let min = +Utils.$("height-min").value, max = +Utils.$("height-max").value;
         if (min > max) {
@@ -109,7 +102,6 @@ class StaffPage {
         return this.sort === "pv" ? [...list].sort((a, b) => a.viewOrder - b.viewOrder) : list;
     }
 
-    // Snap: gộp 2 danh sách, bỏ trùng
     snapList() {
         const source = this.sort === "pv" ? [...SNAPS_POPULAR, ...SNAPS_LATEST] : [...SNAPS_LATEST, ...SNAPS_POPULAR];
         const seen = new Set();

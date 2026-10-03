@@ -17,6 +17,16 @@
 </head>
 <body>
 
+<!-- Dải Flash Sale trên header: đồng hồ đếm ngược (js/countdown.js) -->
+<div class="flash-bar" id="flash-bar">
+    <span class="flash-bar-label">Flash Sale</span>
+    <span class="flash-bar-text">Giảm 20% sản phẩm Sale</span>
+    <span class="flash-bar-clock">Kết thúc sau
+        <b id="cd-hours">00</b>:<b id="cd-minutes">00</b>:<b id="cd-seconds">00</b>
+    </span>
+    <a class="flash-bar-link" href="index.html?cat=sale">Xem ngay ›</a>
+</div>
+
 <!-- Header (kiểu elise.vn): ☰ + logo | TÌM KIẾM ____ | Gọi Ngay, Tài Khoản, túi hàng, yêu thích -->
 <header class="site-header" id="main-header">
     <div class="site-header-inner">
@@ -154,20 +164,6 @@
     </li>
 </ul>
 
-<!-- FLASH SALE: đồng hồ đếm ngược (js/countdown.js) -->
-<section class="flash-sale" id="flash-sale">
-    <div class="flash-sale-text">
-        <h3>Flash Sale hôm nay</h3>
-        <p>Giảm 20% các sản phẩm Sale, kết thúc sau</p>
-    </div>
-    <div class="flash-sale-clock">
-        <span><b id="cd-hours">00</b><small>Giờ</small></span>
-        <span><b id="cd-minutes">00</b><small>Phút</small></span>
-        <span><b id="cd-seconds">00</b><small>Giây</small></span>
-    </div>
-    <button type="button" class="flash-sale-btn" onclick="productList.filterCategory('sale')">Xem sản phẩm Sale</button>
-</section>
-
 <!-- NEW ARRIVAL (kiểu elise.vn): lưới sản phẩm + nút Xem thêm -->
 <section class="new-arrival" id="product-section">
     <h3 class="new-arrival-title">New Arrival</h3>
@@ -272,10 +268,10 @@
 <script src="js/utils.js"></script>         <!-- Hàm dùng chung, thông báo toast -->
 <script src="js/auth.js"></script>          <!-- Đăng ký / đăng nhập, chặn thao tác khi chưa đăng nhập -->
 <script src="js/header.js"></script>        <!-- Header thu gọn khi cuộn, menu trượt -->
+<script src="js/countdown.js"></script>     <!-- Đồng hồ đếm ngược Flash Sale -->
 <script src="js/slider.js"></script>        <!-- Slider banner -->
 <script src="js/wishlist.js"></script>      <!-- Yêu thích -->
 <script src="js/product-list.js"></script>  <!-- Lưới sản phẩm, lọc, tìm kiếm -->
-<script src="js/countdown.js"></script>     <!-- Flash Sale: đồng hồ đếm ngược -->
 <script src="js/staff-data.js"></script>    <!-- Dữ liệu nhân viên & Snap (elise.vn) -->
 <script src="js/staff-widgets.js"></script> <!-- Snap & Xếp hạng nhân viên trên trang chủ -->
 <script src="js/account-modal.js"></script> <!-- Cửa sổ tài khoản -->

@@ -1,6 +1,4 @@
-/* ===== HEADER & MENU TRƯỢT =====
-   Việc: header thu gọn khi cuộn xuống / giãn ra khi cuộn lên; mở-đóng menu trượt bên trái.
-   Dùng: Utils (utils.js). Giao diện: id="main-header", id="menu-drawer" trong index.html. */
+// Header thu gọn khi cuộn và menu trượt bên trái.
 
 class Header {
     constructor() {
@@ -10,7 +8,6 @@ class Header {
         this.bindScroll();
     }
 
-    // Chỉ đổi trạng thái khi cuộn quá 6px (tránh nhấp nháy), gộp theo từng frame cho mượt
     bindScroll() {
         window.addEventListener("scroll", () => {
             if (this.scrollTicking) return;
@@ -35,7 +32,6 @@ class Header {
         Utils.$("drawer-overlay").classList.toggle("active");
     }
 
-    // Mở-đóng nhóm menu con (Thời trang, Thời trang công sở, Sale...)
     toggleSub(id) {
         const el = Utils.$(id);
         if (el) el.classList.toggle("open");
