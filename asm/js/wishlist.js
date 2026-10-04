@@ -1,27 +1,34 @@
 // Sản phẩm yêu thích: lưu theo tài khoản, cập nhật số trên header và vẽ trang wishlist.html.
 
 class Wishlist {
+    // Key lưu danh sách yêu thích riêng cho từng tài khoản ("wishlist:email"). Chưa đăng nhập thì là null.
     key() { return auth.userKey("wishlist"); }
 
+    // Đọc danh sách yêu thích: một mảng chứa id các sản phẩm, ví dụ [3, 7, 12]. Chưa đăng nhập hoặc dữ liệu hỏng thì trả [].
     get() {
         if (!this.key()) return [];
         try { return JSON.parse(localStorage.getItem(this.key())) || []; }
         catch (e) { return []; }
     }
 
+    // Lưu danh sách xuống localStorage, cập nhật số trên header và vẽ lại lưới sản phẩm (để trái tim đổi màu ngay).
     save(list) {
         localStorage.setItem(this.key(), JSON.stringify(list));
         this.updateBadge();
         productList.render(productList.current);
     }
 
+    // Sản phẩm này đã được yêu thích chưa? (true / false)
     has(id) { return this.get().includes(id); }
 
+    // Cập nhật con số yêu thích trên header; nếu đang ở trang yêu thích thì vẽ lại cả trang.
     updateBadge() {
         Utils.setText("wishlist-count", this.get().length);
         if (Utils.$("wishlist-page")) this.renderPage();
     }
 
+    // Bấm trái tim: đã yêu thích thì bỏ (splice cắt khỏi mảng), chưa thì thêm (push). Phải đăng nhập.
+    // event.stopPropagation() ngăn cú bấm "nổi bọt" lên thẻ sản phẩm bên ngoài (nếu không sẽ vừa tim vừa mở trang chi tiết).
     toggle(id, event) {
         event.stopPropagation();
         if (!auth.requireLogin("Vui lòng đăng nhập để lưu sản phẩm yêu thích")) return;
@@ -37,12 +44,15 @@ class Wishlist {
         this.save(list);
     }
 
+    // Xoá một sản phẩm khỏi danh sách yêu thích (giữ lại các id khác id này).
     remove(id) {
         if (!auth.requireLogin()) return;
         this.save(this.get().filter(x => x !== id));
         Utils.showToast("Đã xóa khỏi danh sách yêu thích");
     }
 
+    // Chuyển từ yêu thích sang giỏ: lấy size đã chọn trong ô select của chính sản phẩm đó (btn.closest tìm khối cha),
+    // thêm vào giỏ; chỉ khi thêm thành công mới xoá khỏi danh sách yêu thích.
     moveToCart(id, btn) {
         const size = btn.closest(".wl-item").querySelector(".wl-size").value;
         if (!cart.add(id, 1, size)) return;
@@ -50,6 +60,8 @@ class Wishlist {
         Utils.showToast("✓ Đã chuyển sản phẩm vào giỏ hàng");
     }
 
+    // Vẽ trang yêu thích: chưa đăng nhập thì mời đăng nhập; đã đăng nhập thì đổi danh sách id thành thông tin sản phẩm
+    // (filter(Boolean) bỏ các id không còn sản phẩm), hiện lưới hoặc thông báo trống.
     renderPage() {
         const root = Utils.$("wishlist-page");
         if (!auth.isLoggedIn()) {
@@ -62,11 +74,16 @@ class Wishlist {
             return;
         }
         const items = this.get().map(id => products.find(p => p.id === id)).filter(Boolean);
-        root.innerHTML = `
-          <div class="wl-wrap">
-            <h1 class="wl-title">Sản phẩm yêu thích</h1>
-            <p class="wl-sub">Có <strong>${items.length}</strong> mục trong danh sách yêu thích của bạn</p>
-            ${items.length ? `
+
+        const sizeOptions = ["S", "M", "L", "XL"].map(s => {
+            let selected = "";
+            if (s === "M") selected = " selected";
+            return `<option${selected}>${s}</option>`;
+        }).join("");
+
+        let listHTML = "";
+        if (items.length) {
+            listHTML = `
             <div class="wl-grid">
                 ${items.map(p => `
                     <div class="wl-item">
@@ -78,13 +95,21 @@ class Wishlist {
                         <div class="wl-price">${Utils.formatPrice(p.price)}</div>
                         <div class="wl-row">
                             <label>Kích cỡ</label>
-                            <select class="wl-size">${["S", "M", "L", "XL"].map(s => `<option${s === "M" ? " selected" : ""}>${s}</option>`).join("")}</select>
+                            <select class="wl-size">${sizeOptions}</select>
                         </div>
                         <button class="wl-btn wl-btn-dark wl-add" onclick="wishlist.moveToCart(${p.id}, this)">Thêm vào giỏ</button>
                         <a href="javascript:void(0)" class="wl-remove" onclick="wishlist.remove(${p.id})">Xóa</a>
                     </div>`).join("")}
-            </div>`
-            : `<div class="wl-empty"><i class="fa-regular fa-flag"></i>Không có sản phẩm nào trong danh sách ưa thích của bạn.</div>`}
+            </div>`;
+        } else {
+            listHTML = `<div class="wl-empty"><i class="fa-regular fa-flag"></i>Không có sản phẩm nào trong danh sách ưa thích của bạn.</div>`;
+        }
+
+        root.innerHTML = `
+          <div class="wl-wrap">
+            <h1 class="wl-title">Sản phẩm yêu thích</h1>
+            <p class="wl-sub">Có <strong>${items.length}</strong> mục trong danh sách yêu thích của bạn</p>
+            ${listHTML}
           </div>
             <div class="wl-bar">
                 <div class="wl-bar-inner">

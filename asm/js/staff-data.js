@@ -1,5 +1,6 @@
 // Dữ liệu nhân viên, ảnh Snap và thứ tự xếp hạng nhân viên.
 
+// Danh sách nhân viên: id, tên, chiều cao (cm), cửa hàng, ảnh đại diện, viewOrder (thứ hạng lượt xem, số nhỏ = nhiều lượt xem).
 const STAFF = [
     {"id":131201,"name":"Nguyễn Thị Hằng Nhi","height":170,"location":"Luna Biên Hòa 3","avatar":"image/staff/avatar-131201.jpg","viewOrder":2},
     {"id":131183,"name":"Huỳnh Thị Thu Nhung","height":165,"location":"Luna Thanh Hoá 1","avatar":"image/staff/avatar-131183.jpg","viewOrder":1},
@@ -22,6 +23,7 @@ const STAFF = [
     {"id":131218,"name":"Bùi Thanh Hoa","height":155,"location":"Luna Việt Trì","avatar":"image/staff/avatar-131218.jpg","viewOrder":19}
 ];
 
+// Snap mới nhất (staffId liên kết tới id trong STAFF).
 const SNAPS_LATEST = [
     {"id":68556693,"staffId":131201,"image":"image/staff/snap-68556693.jpg"},
     {"id":68552894,"staffId":131201,"image":"image/staff/snap-68552894.jpg"},
@@ -39,6 +41,7 @@ const SNAPS_LATEST = [
     {"id":65431277,"staffId":131183,"image":"image/staff/snap-65431277.jpg"},
     {"id":65431193,"staffId":131183,"image":"image/staff/snap-65431193.jpg"}
 ];
+// Snap phổ biến.
 const SNAPS_POPULAR = [
     {"id":68552213,"staffId":131201,"image":"image/staff/snap-68552213.jpg"},
     {"id":65431586,"staffId":131183,"image":"image/staff/snap-65431586.jpg"},
@@ -57,4 +60,5 @@ const SNAPS_POPULAR = [
     {"id":62917043,"staffId":131183,"image":"image/staff/snap-62917043.jpg"}
 ];
 
+// Thứ tự xếp hạng nhân viên: danh sách id theo hạng từ 1 trở đi.
 const STAFF_RANKING = [131183,131201,131222,131224,131221,131212,131219,131217,131197,131199,131211,131210,132028,131209,131220];

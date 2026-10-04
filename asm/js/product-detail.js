@@ -1,11 +1,14 @@
 // Trang chi tiết sản phẩm (product.html?id=...): ảnh, giá, size, số lượng, thêm giỏ / yêu thích.
 
 class ProductDetail {
+    // Nhận danh sách sản phẩm; current là sản phẩm đang xem (chưa có thì null).
     constructor(allProducts) {
         this.products = allProducts;
         this.current = null;
     }
 
+    // Vẽ trang chi tiết: đọc id từ địa chỉ (product.html?id=5), tìm sản phẩm, không thấy thì báo "Không tìm thấy".
+    // Thấy thì đổi tiêu đề tab và dựng HTML gồm ảnh, giá (kèm giá gốc nếu là hàng sale), chọn size, số lượng, nút thêm giỏ / yêu thích.
     render() {
         const root = Utils.$("pd-page");
         const id = parseInt(new URLSearchParams(location.search).get("id"), 10);
@@ -17,10 +20,18 @@ class ProductDetail {
         this.current = p;
         document.title = `${p.name} | Luna`;
         const originalPrice = Utils.getOriginalPrice(p);
-        const sizes = ["S", "M", "L", "XL"].map((s, i) =>
-            `<span class="size-pill${i === 0 ? " active" : ""}" onclick="productDetail.selectSize(this)">${s}</span>`).join("");
-        const photos = (p.gallery && p.gallery.length ? p.gallery : [p.image]).map(src =>
-            `<img src="${src}" alt="${p.name}">`).join("");
+        const sizes = ["S", "M", "L", "XL"].map((s, i) => {
+            let activeClass = "";
+            if (i === 0) activeClass = " active";
+            return `<span class="size-pill${activeClass}" onclick="productDetail.selectSize(this)">${s}</span>`;
+        }).join("");
+
+        let gallery = [p.image];
+        if (p.gallery && p.gallery.length) gallery = p.gallery;
+        const photos = gallery.map(src => `<img src="${src}" alt="${p.name}">`).join("");
+
+        let oldPriceHTML = "";
+        if (originalPrice) oldPriceHTML = `<span class="old-price">${Utils.formatPrice(originalPrice)}</span>`;
 
         root.innerHTML = `
             <div class="pd-breadcrumb"><a href="index.html">Trang chủ</a> / <a href="index.html#product-section">Thời trang</a> / <span>${p.name}</span></div>
@@ -30,7 +41,7 @@ class ProductDetail {
                     <h1 class="pd-name">${p.name}</h1>
                     <div class="pd-price">
                         ${Utils.formatPrice(p.price)}
-                        ${originalPrice ? `<span class="old-price">${Utils.formatPrice(originalPrice)}</span>` : ""}
+                        ${oldPriceHTML}
                     </div>
                     <div class="pd-sku">SKU: ${p.sku || ""}</div>
                     <div class="pd-row">
@@ -68,6 +79,7 @@ class ProductDetail {
             </div>`;
     }
 
+    // Tạo một mục thu gọn / mở rộng (tiêu đề + nội dung). Bấm tiêu đề thì bật tắt class "open" của khối cha.
     accordion(title, body) {
         return `<div class="pd-acc">
             <a href="javascript:void(0)" class="pd-acc-title" onclick="this.parentNode.classList.toggle('open')"><i class="pd-caret"></i>${title}</a>
@@ -75,26 +87,33 @@ class ProductDetail {
         </div>`;
     }
 
+    // Chọn size: chỉ nút vừa bấm có class "active", các nút size khác bị tắt.
     selectSize(el) {
         document.querySelectorAll(".size-pill").forEach(s => s.classList.toggle("active", s === el));
     }
 
+    // Tăng / giảm số lượng theo delta (-1, +1; 0 chỉ để chuẩn hoá lại giá trị người dùng gõ tay). Tối thiểu là 1.
     changeQty(delta) {
         const input = Utils.$("pd-qty-input");
         input.value = Math.max(1, (parseInt(input.value, 10) || 1) + delta);
     }
 
+    // Bấm "Thêm vào giỏ": lấy số lượng và size đang chọn (không có size nào thì để undefined, cart.add sẽ dùng size mặc định).
     addToCart() {
         const qty = Math.max(1, parseInt(Utils.$("pd-qty-input").value, 10) || 1);
         const size = document.querySelector(".size-pill.active");
-        cart.add(this.current.id, qty, size ? size.textContent.trim() : undefined);
+        let sizeValue = undefined;
+        if (size) sizeValue = size.textContent.trim();
+        cart.add(this.current.id, qty, sizeValue);
     }
 
+    // Bấm "Thêm vào yêu thích": chưa có thì thêm, đã có thì chỉ báo "đã có" (không gỡ ra, khác với trái tim ở lưới sản phẩm).
     addToWishlist(event) {
         if (!wishlist.has(this.current.id)) wishlist.toggle(this.current.id, event);
         else { event.stopPropagation(); Utils.showToast("Sản phẩm đã có trong danh sách yêu thích"); }
     }
 
+    // Sao chép địa chỉ trang hiện tại vào bộ nhớ tạm (clipboard) và báo cho người dùng.
     share() {
         if (navigator.clipboard) navigator.clipboard.writeText(location.href);
         Utils.showToast("Đã sao chép liên kết");
